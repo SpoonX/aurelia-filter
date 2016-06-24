@@ -1,0 +1,27 @@
+{
+  "name": "aurelia-filter",
+  "version": "0.0.1",
+  "description": "A plugin for aurelia to populate search/filter criteria. Works well with aurelia-orm.",
+  "main": "src/aurelia-filter.js",
+  "scripts": {
+    "test": "gulp test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/SpoonX/aurelia-filter.git"
+  },
+  "keywords": [
+    "aurelia",
+    "spoonx",
+    "filter",
+    "orm",
+    "query",
+    "criteria"
+  ],
+  "author": "SpoonX <info@spoonx.nl>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/SpoonX/aurelia-filter/issues"
+  },
+  "homepage": "https://github.com/SpoonX/aurelia-filter#readme"
+}
