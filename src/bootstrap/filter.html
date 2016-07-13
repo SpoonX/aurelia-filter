@@ -31,13 +31,13 @@
                 class="btn btn-primary add-filter "
                 if.bind="$last"
                 click.delegate="create($parent.$index)"
-                t="+ AND">+ AND
+                t="+ AND">+
               </button>
               <button
                 class="btn btn-danger remove-filter"
                 if.bind="filter.length > 1"
                 click.delegate="destroy($parent.$index, $index)"
-                t="- AND">- AND
+                t="- AND">-
               </button>
             </div>
           </div>
@@ -62,13 +62,13 @@
             class="btn btn-primary add-block"
             if.bind="$last"
             click.delegate="create()"
-            t="+ OR">+ OR
+            t="+ OR">+
           </a>
           <a
             class="btn btn-danger remove-block"
             if.bind="filters.length > 1"
             click.delegate="destroy($index)"
-            t="- OR">- OR;
+            t="- OR">-;
           </a>
         </div>
       </div>
