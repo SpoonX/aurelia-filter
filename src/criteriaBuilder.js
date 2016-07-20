@@ -20,7 +20,7 @@ export class CriteriaBuilder {
     });
 
     let currentSort = this.criteria.sort || {};
-    this.criteria = (blocks.length > 1) ? {where: {or: blocks}, sort: currentSort} : {where: blocks[0], sort: currentSort};
+    this.criteria   = (blocks.length > 1) ? {where: {or: blocks}, sort: currentSort} : {where: blocks[0], sort : currentSort};
   }
 
   parseOperator(filter) {
