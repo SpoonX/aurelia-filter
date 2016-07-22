@@ -25,12 +25,15 @@ export class CriteriaBuilder {
 
   parseOperator(filter) {
     switch(filter.operator) {
+      case 'equals':
+          return filter.value;
       case 'between':
         return this.parseBetween(filter);
       case 'in':
         return this.toArray(filter.value);
-      case 'not-in':
-        filter.operator = 'not';
+      case '!':
+        // not-in
+        filter.operator = '!';
         filter.value    = this.toArray(filter.value);
       default:
         return {[filter.operator]: filter.value};
