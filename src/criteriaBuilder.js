@@ -19,9 +19,9 @@ export class CriteriaBuilder {
       blocks.push(filtersParsed);
     });
 
-    let criteriaWhere = (blocks.length > 1) ? {where: {or: blocks}} : {where: blocks[0]},
-        currentSort   = this.criteria.sort || {};
-    
+    let criteriaWhere = (blocks.length > 1) ? {where: {or: blocks}} : {where: blocks[0]};
+    let currentSort   = this.criteria.sort || {};
+
     this.criteria     = Object.assign(criteriaWhere, {sort: currentSort});
   }
 

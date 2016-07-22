@@ -106,29 +106,25 @@ export class Filter extends CriteriaBuilder {
     if (typeof field === 'string') {
       return {operator: 'equals', value: field};
     }
-    else if (Array.isArray(field)) {
+    
+    if (Array.isArray(field)) {
       return {operator: 'in', value: field.join()};
     }
-    else {
-      if (Object.keys(field).length > 1) {
-        return {operator: 'between', value: field['>='], between: field['<=']};
-      }
-      else {
-        let name = Object.keys(field)[0];
 
-        if (Array.isArray(field[name])) {
-          // not-in
-          return {operator: '!', value: field[name].join()};
-        }
-        else {
-          let operator = Object.keys(field)[0];
-
-          return {operator: operator, value: field[operator]};
-        }
-      }
+    if (Object.keys(field).length > 1) {
+      return {operator: 'between', value: field['>='], between: field['<=']};
     }
+    
+    let name = Object.keys(field)[0];
 
-    return {operator: null, value: null};
+    if (Array.isArray(field[name])) {
+      // not-in
+      return {operator: '!', value: field[name].join()};
+    }
+    
+    let operator = Object.keys(field)[0];
+
+    return {operator: operator, value: field[operator]};
   }
 
   create(blockIndex, data) {
