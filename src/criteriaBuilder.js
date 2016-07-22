@@ -20,7 +20,8 @@ export class CriteriaBuilder {
     });
 
     let criteriaWhere = (blocks.length > 1) ? {where: {or: blocks}} : {where: blocks[0]},
-        currentSort = this.criteria.sort || {};
+        currentSort   = this.criteria.sort || {};
+    
     this.criteria     = Object.assign(criteriaWhere, {sort: currentSort});
   }
 
