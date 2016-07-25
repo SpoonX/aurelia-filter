@@ -215,13 +215,24 @@ export class Filter extends CriteriaBuilder {
   }
 
   generateFields(columns, entityName) {
+    let addColumnId = true;
+
     for (let column in columns) {
       let columnName = (entityName) ? entityName + '.' + column : column;
 
+      addColumnId = ( columnName === 'id' ? false : addColumnId );
       this.columns.push({
         name  : columnName,
         value : columnName,
         type  : columns[column] || 'string'
+      });
+    }
+
+    if (addColumnId) {
+      this.columns.push({
+        name  : 'id',
+        value : 'id',
+        type  : 'number'
       });
     }
   }
