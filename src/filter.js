@@ -78,28 +78,27 @@ export class Filter extends CriteriaBuilder {
           data = Object.assign(this.buildFieldData(block[field]), {field: field});
           if (!this.filters[i]) {
             // create a new block
-            this.create(undefined, data);
+            return this.create(undefined, data);
           }
-          else {
-            // Add AND condition to the current block
-            this.create(i, data);
-          }
+
+          // Add AND condition to the current block
+          this.create(i, data);
         });
       });
+
+      return;
     }
-    else {
-      Object.keys(criteriaWhere).forEach((field, i) => {
-        data = Object.assign(this.buildFieldData(criteriaWhere[field]), {field: field});
-        if (i === 0) {
-          // create the first block
-          this.create(undefined, data);
-        }
-        else {
-          // Add AND condition to the first block
-          this.create(0, data);
-        }
-      });
-    }
+
+    Object.keys(criteriaWhere).forEach((field, i) => {
+      data = Object.assign(this.buildFieldData(criteriaWhere[field]), {field: field});
+      if (i === 0) {
+        // create the first block
+        return this.create(undefined, data);
+      }
+
+      // Add AND condition to the first block
+      this.create(0, data);
+    });
   }
 
   buildFieldData(field) {
