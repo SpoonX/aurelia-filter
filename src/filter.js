@@ -62,11 +62,10 @@ export class Filter extends CriteriaBuilder {
 
     // Do we need to set pre-defined values for the filter?
     if (Object.keys(this.criteria.where).length) {
-      this.parseCriteria(this.criteria.where);
+      return this.parseCriteria(this.criteria.where);
     }
-    else {
-      this.create();
-    }
+
+    this.create();
   }
 
   parseCriteria(criteriaWhere) {
