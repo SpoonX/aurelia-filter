@@ -19,17 +19,23 @@ export class CriteriaBuilder {
       blocks.push(filtersParsed);
     });
 
-    this.criteria = (blocks.length > 1) ? {where: {or: blocks}} : {where: blocks[0]};
+    let criteriaWhere = (blocks.length > 1) ? {where: {or: blocks}} : {where: blocks[0]};
+    let currentSort   = this.criteria.sort || {};
+
+    this.criteria     = Object.assign(criteriaWhere, {sort: currentSort});
   }
 
   parseOperator(filter) {
     switch(filter.operator) {
+      case 'equals':
+          return filter.value;
       case 'between':
         return this.parseBetween(filter);
       case 'in':
         return this.toArray(filter.value);
-      case 'not-in':
-        filter.operator = 'not';
+      case '!':
+        // not-in
+        filter.operator = '!';
         filter.value    = this.toArray(filter.value);
       default:
         return {[filter.operator]: filter.value};

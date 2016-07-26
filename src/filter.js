@@ -27,7 +27,7 @@ export class Filter extends CriteriaBuilder {
       {name: 'equals',                value: 'equals'},
       {name: 'not equals',            value: 'not'},
       {name: 'in',                    value: 'in'},
-      {name: 'not in',                value: 'not-in'},
+      {name: 'not in',                value: '!'},
       {name: 'contains',              value: 'contains'},
       {name: 'begins with',           value: 'startsWith'},
       {name: 'ends with',             value: 'endsWith'},
@@ -60,15 +60,75 @@ export class Filter extends CriteriaBuilder {
     this.fieldElement.options = this.columns;
     this.valueElement.type    = this.columns[0].type || 'string'; // set the initial valueElement `type`
 
+    // Do we need to set pre-defined values for the filter?
+    if (Object.keys(this.criteria.where).length) {
+      return this.parseCriteria(this.criteria.where);
+    }
+
     this.create();
   }
 
-  create(blockIndex) {
+  parseCriteria(criteriaWhere) {
+    let data = {};
+
+    if (criteriaWhere.or) {
+      criteriaWhere.or.forEach((block, i) => {
+        Object.keys(block).forEach((field) => {
+          data = Object.assign(this.buildFieldData(block[field]), {field: field});
+          if (!this.filters[i]) {
+            // create a new block
+            return this.create(undefined, data);
+          }
+
+          // Add AND condition to the current block
+          this.create(i, data);
+        });
+      });
+
+      return;
+    }
+
+    Object.keys(criteriaWhere).forEach((field, i) => {
+      data = Object.assign(this.buildFieldData(criteriaWhere[field]), {field: field});
+      if (i === 0) {
+        // create the first block
+        return this.create(undefined, data);
+      }
+
+      // Add AND condition to the first block
+      this.create(0, data);
+    });
+  }
+
+  buildFieldData(field) {
+    if (typeof field === 'string') {
+      return {operator: 'equals', value: field};
+    }
+    
+    if (Array.isArray(field)) {
+      return {operator: 'in', value: field.join()};
+    }
+
+    if (Object.keys(field).length > 1) {
+      return {operator: 'between', value: field['>='], between: field['<=']};
+    }
+    
+    let key = Object.keys(field)[0];
+
+    if (Array.isArray(field[key])) {
+      // not-in
+      return {operator: '!', value: field[key].join()};
+    }
+
+    return {operator: key, value: field[key]};
+  }
+
+  create(blockIndex, data) {
     let filter = {
       field   : this.fieldElement,
       operator: this.operatorElement,
       value   : Object.create(this.valueElement),
-      data    : {}
+      data    : data || {}
     };
 
     // create filter
@@ -136,7 +196,12 @@ export class Filter extends CriteriaBuilder {
     let repositories = this.entity.getRepository().entityManager.repositories;
     for (let association in metaData.associations) {
       let entityName = metaData.associations[association].entity;
-      let repoData   = repositories[entityName].getMeta().metadata.types; // no `asObject` method available
+
+      if (!repositories[entityName]) {
+        return;
+      }
+
+      let repoData = repositories[entityName].getMeta().metadata.types; // no `asObject` method available
 
       if (!repoData) {
         continue;
@@ -147,13 +212,24 @@ export class Filter extends CriteriaBuilder {
   }
 
   generateFields(columns, entityName) {
+    let addColumnId = true;
+
     for (let column in columns) {
       let columnName = (entityName) ? entityName + '.' + column : column;
 
+      addColumnId = ( columnName === 'id' ? false : addColumnId );
       this.columns.push({
         name  : columnName,
         value : columnName,
         type  : columns[column] || 'string'
+      });
+    }
+
+    if (addColumnId) {
+      this.columns.push({
+        name  : 'id',
+        value : 'id',
+        type  : 'number'
       });
     }
   }
