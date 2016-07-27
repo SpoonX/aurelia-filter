@@ -58,13 +58,13 @@ export class Filter extends CriteriaBuilder {
     }
 
     this.fieldElement.options = this.columns;
-    this.valueElement.type    = this.columns[0].type || 'string'; // set the initial valueElement `type`
 
     // Do we need to set pre-defined values for the filter?
-    if (Object.keys(this.criteria.where).length) {
+    if (this.criteria.where && Object.keys(this.criteria.where).length) {
       return this.parseCriteria(this.criteria.where);
     }
 
+    this.valueElement.type = this.columns[0].type || 'string'; // set the initial valueElement `type`
     this.create();
   }
 
