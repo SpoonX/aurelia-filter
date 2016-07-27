@@ -64,7 +64,7 @@ export class Filter extends CriteriaBuilder {
       return this.parseCriteria(this.criteria.where);
     }
 
-    this.valueElement.type    = this.columns[0].type || 'string'; // set the initial valueElement `type`
+    this.valueElement.type = this.columns[0].type || 'string'; // set the initial valueElement `type`
     this.create();
   }
 
