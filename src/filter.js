@@ -1,11 +1,9 @@
-import {inject, customElement, bindable, bindingMode} from 'aurelia-framework';
-import {resolvedView}                                 from 'aurelia-view-manager';
-import {Config as FormConfig}                         from 'aurelia-form';
-import {CriteriaBuilder}                              from './criteriaBuilder';
+import {customElement, bindable, bindingMode} from 'aurelia-framework';
+import {resolvedView}                         from 'aurelia-view-manager';
+import {CriteriaBuilder}                      from './criteriaBuilder';
 
 @customElement('filter')
 @resolvedView('spoonx/filter', 'filter')
-@inject(FormConfig)
 export class Filter extends CriteriaBuilder {
   @bindable({defaultBindingMode: bindingMode.twoWay}) criteria = {};
   @bindable columns                                            = [];
@@ -104,7 +102,7 @@ export class Filter extends CriteriaBuilder {
     if (typeof field === 'string') {
       return {operator: 'equals', value: field};
     }
-    
+
     if (Array.isArray(field)) {
       return {operator: 'in', value: field.join()};
     }
@@ -112,7 +110,7 @@ export class Filter extends CriteriaBuilder {
     if (Object.keys(field).length > 1) {
       return {operator: 'between', value: field['>='], between: field['<=']};
     }
-    
+
     let key = Object.keys(field)[0];
 
     if (Array.isArray(field[key])) {
