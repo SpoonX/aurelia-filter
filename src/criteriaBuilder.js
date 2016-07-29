@@ -26,20 +26,23 @@ export class CriteriaBuilder {
   }
 
   parseOperator(filter) {
-    switch(filter.operator) {
-      case 'equals':
-          return filter.value;
-      case 'between':
-        return this.parseBetween(filter);
-      case 'in':
-        return this.toArray(filter.value);
-      case '!':
-        // not-in
-        filter.operator = '!';
-        filter.value    = this.toArray(filter.value);
-      default:
-        return {[filter.operator]: filter.value};
+    switch (filter.operator) {
+    case 'equals':
+      return filter.value;
+    case 'between':
+      return this.parseBetween(filter);
+    case 'in':
+      return this.toArray(filter.value);
+    case '!':
+      // not-in
+      filter.operator = '!';
+      filter.value    = this.toArray(filter.value);
+      break;
+    default:
+      break;
     }
+
+    return {[filter.operator]: filter.value};
   }
 
   parseBetween(data, valueOperator = '>=', betweenOperator = '<=') {
@@ -48,13 +51,13 @@ export class CriteriaBuilder {
     }
 
     return {
-      [valueOperator]  : data.value,
+      [valueOperator]: data.value,
       [betweenOperator]: data.between
     };
   }
 
   parseField(fieldName, data) {
-    var fieldName = fieldName.split('.');
+    fieldName = fieldName.split('.');
 
     if (fieldName.length > 1) {
       return {[fieldName[0]]: {[fieldName[1]]: data}};
