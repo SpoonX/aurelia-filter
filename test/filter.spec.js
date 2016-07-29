@@ -1,7 +1,7 @@
-import {Filter} from '../src/filter';
+// import {Filter} from '../src/filter';
 import {StageComponent} from 'aurelia-testing';
 import {bootstrap} from 'aurelia-bootstrapper';
-import {Container} from 'aurelia-dependency-injection';
+// import {Container} from 'aurelia-dependency-injection';
 
 describe('Filter', () => {
   let component;
@@ -26,8 +26,8 @@ describe('Filter', () => {
 
   describe('.compose()', function() {
     it('Should xy', function(done) {
-      let container = new Container();
-      let filter = container.get(Filter);
+      // let container = new Container();
+      // let filter = container.get(Filter);
 
       component.create(bootstrap).then(function() {
         done();
