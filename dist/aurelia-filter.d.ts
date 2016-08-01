@@ -18,6 +18,8 @@ export declare class Filter extends CriteriaBuilder {
   fieldElement: any;
   operatorElement: any;
   valueElement: any;
+  
+  // button group styling issue
   constructor();
   attached(): any;
   parseCriteria(criteriaWhere?: any): any;

@@ -1,6 +1,6 @@
 {
   "name": "aurelia-filter",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "A plugin for aurelia to populate search/filter criteria. Works well with aurelia-orm.",
   "keywords": [
     "aurelia",
@@ -50,12 +50,6 @@
       "aurelia-polyfills": "^1.0.0-rc.1.0.0",
       "aurelia-testing": "^1.0.0-beta.1.0.3"
     }
-  },
-  "dependencies": {
-    "aurelia-form": "^0.1.6",
-    "aurelia-framework": "^1.0.0-rc.1.0.0",
-    "aurelia-view-manager": "^0.0.5",
-    "extend": "^3.0.0"
   },
   "dependencies": {
     "aurelia-form": "^0.1.6",
