@@ -26,6 +26,9 @@ This is as simple as `EntityManager.getEntity('resource')`. *[More information](
 
 If you don't use the `@type` decorator it will assume that the column is `text`.
 
+### exclude-columns
+When using an entity, you can exclude columns (comma separated) from showing up in the filter.
+
 ### criteria
 The generated criteria object. Use this object to query your application.
 
