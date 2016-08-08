@@ -1,4 +1,4 @@
-var _dec, _dec2, _dec3, _class, _desc, _value, _class2, _descriptor, _descriptor2, _descriptor3;
+var _dec, _dec2, _dec3, _class, _desc, _value, _class2, _descriptor, _descriptor2, _descriptor3, _descriptor4;
 
 function _initDefineProp(target, property, descriptor, context) {
   if (!descriptor) return;
@@ -57,6 +57,8 @@ export let Filter = (_dec = customElement('filter'), _dec2 = resolvedView('spoon
     _initDefineProp(this, 'columns', _descriptor2, this);
 
     _initDefineProp(this, 'entity', _descriptor3, this);
+
+    _initDefineProp(this, 'excludeColumns', _descriptor4, this);
 
     this.filters = [];
     this.fieldElement = {
@@ -227,8 +229,14 @@ export let Filter = (_dec = customElement('filter'), _dec2 = resolvedView('spoon
   }
 
   generateFields(columns, entityName) {
+    let excludeColumns = this.excludeColumns ? this.excludeColumns.replace(/\s/g, '').split(',') : [];
+
     for (let column in columns) {
       let columnName = entityName ? entityName + '.' + column : column;
+
+      if (excludeColumns.indexOf(columnName) > -1) {
+        continue;
+      }
 
       this.columns.push({
         name: columnName,
@@ -252,4 +260,7 @@ export let Filter = (_dec = customElement('filter'), _dec2 = resolvedView('spoon
   initializer: function () {
     return null;
   }
+}), _descriptor4 = _applyDecoratedDescriptor(_class2.prototype, 'excludeColumns', [bindable], {
+  enumerable: true,
+  initializer: null
 })), _class2)) || _class) || _class);

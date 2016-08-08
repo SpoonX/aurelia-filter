@@ -5,7 +5,7 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.Filter = undefined;
 
-var _dec, _dec2, _dec3, _class, _desc, _value, _class2, _descriptor, _descriptor2, _descriptor3;
+var _dec, _dec2, _dec3, _class, _desc, _value, _class2, _descriptor, _descriptor2, _descriptor3, _descriptor4;
 
 var _aureliaFramework = require('aurelia-framework');
 
@@ -75,6 +75,8 @@ var Filter = exports.Filter = (_dec = (0, _aureliaFramework.customElement)('filt
     _initDefineProp(_this, 'columns', _descriptor2, _this);
 
     _initDefineProp(_this, 'entity', _descriptor3, _this);
+
+    _initDefineProp(_this, 'excludeColumns', _descriptor4, _this);
 
     _this.filters = [];
     _this.fieldElement = {
@@ -261,8 +263,14 @@ var Filter = exports.Filter = (_dec = (0, _aureliaFramework.customElement)('filt
   };
 
   Filter.prototype.generateFields = function generateFields(columns, entityName) {
+    var excludeColumns = this.excludeColumns ? this.excludeColumns.replace(/\s/g, '').split(',') : [];
+
     for (var column in columns) {
       var columnName = entityName ? entityName + '.' + column : column;
+
+      if (excludeColumns.indexOf(columnName) > -1) {
+        continue;
+      }
 
       this.columns.push({
         name: columnName,
@@ -288,4 +296,7 @@ var Filter = exports.Filter = (_dec = (0, _aureliaFramework.customElement)('filt
   initializer: function initializer() {
     return null;
   }
+}), _descriptor4 = _applyDecoratedDescriptor(_class2.prototype, 'excludeColumns', [_aureliaFramework.bindable], {
+  enumerable: true,
+  initializer: null
 })), _class2)) || _class) || _class);

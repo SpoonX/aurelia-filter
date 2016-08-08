@@ -26,6 +26,8 @@ define(['exports', 'extend'], function (exports, _extend) {
 
       var blocks = [];
 
+      this.populate = [];
+
       this.filters.forEach(function (block, index) {
         var filtersParsed = {};
 
@@ -43,7 +45,9 @@ define(['exports', 'extend'], function (exports, _extend) {
       var criteriaWhere = blocks.length > 1 ? { where: { or: blocks } } : { where: blocks[0] };
       var currentSort = this.criteria.sort || {};
 
-      this.criteria = Object.assign(criteriaWhere, { sort: currentSort });
+      this.criteria = Object.assign(criteriaWhere, { sort: currentSort, populate: this.populate.join(',') });
+
+      console.log(this.criteria);
     };
 
     CriteriaBuilder.prototype.parseOperator = function parseOperator(filter) {
@@ -81,17 +85,21 @@ define(['exports', 'extend'], function (exports, _extend) {
     };
 
     CriteriaBuilder.prototype.parseField = function parseField(fieldName, data) {
-      var _ref4;
+      var _fieldName$, _ref4;
 
       fieldName = fieldName.split('.');
 
-      if (fieldName.length > 1) {
-        var _fieldName$, _ref3;
+      if (fieldName.length === 1) {
+        var _ref3;
 
-        return _ref3 = {}, _ref3[fieldName[0]] = (_fieldName$ = {}, _fieldName$[fieldName[1]] = data, _fieldName$), _ref3;
+        return _ref3 = {}, _ref3[fieldName[0]] = data, _ref3;
       }
 
-      return _ref4 = {}, _ref4[fieldName[0]] = data, _ref4;
+      if (this.populate.indexOf(fieldName[0]) < 0) {
+        this.populate.push(fieldName[0]);
+      }
+
+      return _ref4 = {}, _ref4[fieldName[0]] = (_fieldName$ = {}, _fieldName$[fieldName[1]] = data, _fieldName$), _ref4;
     };
 
     CriteriaBuilder.prototype.toArray = function toArray(value) {

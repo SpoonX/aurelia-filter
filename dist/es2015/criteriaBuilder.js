@@ -5,6 +5,8 @@ export let CriteriaBuilder = class CriteriaBuilder {
   updateCriteria() {
     let blocks = [];
 
+    this.populate = [];
+
     this.filters.forEach((block, index) => {
       let filtersParsed = {};
 
@@ -22,7 +24,9 @@ export let CriteriaBuilder = class CriteriaBuilder {
     let criteriaWhere = blocks.length > 1 ? { where: { or: blocks } } : { where: blocks[0] };
     let currentSort = this.criteria.sort || {};
 
-    this.criteria = Object.assign(criteriaWhere, { sort: currentSort });
+    this.criteria = Object.assign(criteriaWhere, { sort: currentSort, populate: this.populate.join(',') });
+
+    console.log(this.criteria);
   }
 
   parseOperator(filter) {
@@ -58,11 +62,15 @@ export let CriteriaBuilder = class CriteriaBuilder {
   parseField(fieldName, data) {
     fieldName = fieldName.split('.');
 
-    if (fieldName.length > 1) {
-      return { [fieldName[0]]: { [fieldName[1]]: data } };
+    if (fieldName.length === 1) {
+      return { [fieldName[0]]: data };
     }
 
-    return { [fieldName[0]]: data };
+    if (this.populate.indexOf(fieldName[0]) < 0) {
+      this.populate.push(fieldName[0]);
+    }
+
+    return { [fieldName[0]]: { [fieldName[1]]: data } };
   }
 
   toArray(value) {
