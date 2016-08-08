@@ -14,6 +14,7 @@ export declare class Filter extends CriteriaBuilder {
   criteria: any;
   columns: any;
   entity: any;
+  excludeColumns: any;
   filters: any;
   fieldElement: any;
   operatorElement: any;

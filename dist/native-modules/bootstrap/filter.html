@@ -1,8 +1,8 @@
 
 <template>
-  <div repeat.for="filter of filters" class="filters row">
+  <div repeat.for="filter of filters" class="filters">
     <div repeat.for="field of filter">
-      <div class="row col-md-12">
+      <div class="col-md-12">
         <div class="col-md-4">
           <form-field
               change.delegate="onChange($parent.$index, $index) & debounce:200"
@@ -45,8 +45,16 @@
         </div>
       </div>
 
-      <div if.bind="field.data.operator === 'between'" class="row col-md-12">
-        <div class="col-md-offset-8 col-md-4" style="margin-bottom: 15px;">
+      <div if.bind="field.data.operator === 'between'" class="col-md-12">
+        <div class="col-md-4">
+          <input type="text" class="form-control disabled" disabled>
+        </div>
+
+        <div class="col-md-4">
+          <input type="text" class="form-control disabled" disabled value="and" t="[value]and">
+        </div>
+
+        <div class="col-md-4" style="margin-bottom: 15px;">
           <form-field
               keypress.delegate="onChange($parent.$index, $index, true) & debounce:500"
               value.bind="field.data.between"
@@ -56,17 +64,17 @@
       </div>
     </div>
 
-    <div class="row col-md-12">
+    <div class="col-md-12">
       <div class="col-md-offset-4 col-md-4">
         <div class="btn-group btn-group btn-group-justified">
           <a
-              class="btn btn-primary add-block"
+              class="btn btn-primary add-block btn-sm"
               if.bind="$last"
               click.delegate="create()"
               t="+ Or">+
           </a>
           <a
-              class="btn btn-danger remove-block"
+              class="btn btn-danger remove-block btn-sm"
               if.bind="filters.length > 1"
               click.delegate="destroy($index)"
               t="- Or">-;
@@ -75,8 +83,10 @@
       </div>
     </div>
 
-    <div class="row col-md-12" if.bind="!$last">
+    <div class="col-md-12" if.bind="!$last">
       <hr>
     </div>
+
+    <div class="clearfix"></div>
   </div>
 </template>
