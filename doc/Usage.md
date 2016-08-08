@@ -26,6 +26,28 @@ This is as simple as `EntityManager.getEntity('resource')`. *[More information](
 
 If you don't use the `@type` decorator it will assume that the column is `text`.
 
+### exclude-columns
+When using an entity, you can exclude columns (comma separated) from showing up in the filter. You can exclude entire associations or part of them.
+
+```js
+// entity result set
+{
+    user: {
+        username: 'Bob',
+        password: 'a78dasd8907asd89a7sd&ASd98a7sd79'
+    },
+    groups: {
+        id  : 1,
+        name: 'users'
+    },
+    createdAt: '2016-01-01'
+}
+```
+
+```html
+<filter exclude-columns="user.password, createdAt, groups"></filter>
+```
+
 ### criteria
 The generated criteria object. Use this object to query your application.
 

@@ -48,5 +48,5 @@ this.userEntity = entityManager.getEntity('users');
 ```
 
 ```html
-<filter entity.bind="userEntity" criteria.bind="criteria"></filter>
+<filter entity.bind="userEntity" criteria.bind="criteria" exclude-columns="password, createdAt"></filter>
 ```

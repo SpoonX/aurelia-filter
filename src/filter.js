@@ -8,6 +8,7 @@ export class Filter extends CriteriaBuilder {
   @bindable({defaultBindingMode: bindingMode.twoWay}) criteria = {};
   @bindable columns                                            = [];
   @bindable entity                                             = null;
+  @bindable excludeColumns;
 
   filters      = [];
   fieldElement = {
@@ -210,8 +211,15 @@ export class Filter extends CriteriaBuilder {
   }
 
   generateFields(columns, entityName) {
+    let excludeColumns = (this.excludeColumns) ? this.excludeColumns.replace(/\s/g, '').split(',') : [];
+
     for (let column in columns) {
       let columnName = (entityName) ? entityName + '.' + column : column;
+
+      // ignore entire or part of a association
+      if (excludeColumns.indexOf(entityName) > -1 || excludeColumns.indexOf(columnName) > -1) {
+        continue;
+      }
 
       this.columns.push({
         name: columnName,
