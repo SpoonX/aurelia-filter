@@ -216,7 +216,8 @@ export class Filter extends CriteriaBuilder {
     for (let column in columns) {
       let columnName = (entityName) ? entityName + '.' + column : column;
 
-      if (excludeColumns.indexOf(columnName) > -1) {
+      // ignore entire or part of a association
+      if (excludeColumns.indexOf(entityName) > -1 || excludeColumns.indexOf(columnName) > -1) {
         continue;
       }
 
