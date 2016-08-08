@@ -36,7 +36,7 @@ When using an entity, you can exclude columns (comma separated) from showing up 
         username: 'Bob',
         password: 'a78dasd8907asd89a7sd&ASd98a7sd79'
     },
-    groups   : {
+    groups: {
         id  : 1,
         name: 'users'
     },
