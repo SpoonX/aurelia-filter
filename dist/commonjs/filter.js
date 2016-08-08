@@ -268,7 +268,7 @@ var Filter = exports.Filter = (_dec = (0, _aureliaFramework.customElement)('filt
     for (var column in columns) {
       var columnName = entityName ? entityName + '.' + column : column;
 
-      if (excludeColumns.indexOf(columnName) > -1) {
+      if (excludeColumns.indexOf(entityName) > -1 || excludeColumns.indexOf(columnName) > -1) {
         continue;
       }
 

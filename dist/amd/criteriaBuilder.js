@@ -46,8 +46,6 @@ define(['exports', 'extend'], function (exports, _extend) {
       var currentSort = this.criteria.sort || {};
 
       this.criteria = Object.assign(criteriaWhere, { sort: currentSort, populate: this.populate.join(',') });
-
-      console.log(this.criteria);
     };
 
     CriteriaBuilder.prototype.parseOperator = function parseOperator(filter) {

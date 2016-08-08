@@ -25,8 +25,6 @@ export let CriteriaBuilder = class CriteriaBuilder {
     let currentSort = this.criteria.sort || {};
 
     this.criteria = Object.assign(criteriaWhere, { sort: currentSort, populate: this.populate.join(',') });
-
-    console.log(this.criteria);
   }
 
   parseOperator(filter) {
