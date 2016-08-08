@@ -234,7 +234,7 @@ export let Filter = (_dec = customElement('filter'), _dec2 = resolvedView('spoon
     for (let column in columns) {
       let columnName = entityName ? entityName + '.' + column : column;
 
-      if (excludeColumns.indexOf(columnName) > -1) {
+      if (excludeColumns.indexOf(entityName) > -1 || excludeColumns.indexOf(columnName) > -1) {
         continue;
       }
 

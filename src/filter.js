@@ -15,7 +15,7 @@ export class Filter extends CriteriaBuilder {
     key: 'field',
     type: 'select',
     label: false,
-    options: [],
+    options: []
   };
 
   operatorElement = {

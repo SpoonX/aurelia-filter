@@ -259,7 +259,7 @@ export var Filter = (_dec = customElement('filter'), _dec2 = resolvedView('spoon
     for (var column in columns) {
       var columnName = entityName ? entityName + '.' + column : column;
 
-      if (excludeColumns.indexOf(columnName) > -1) {
+      if (excludeColumns.indexOf(entityName) > -1 || excludeColumns.indexOf(columnName) > -1) {
         continue;
       }
 

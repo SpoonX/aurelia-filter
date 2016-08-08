@@ -291,7 +291,7 @@ System.register(['aurelia-framework', 'aurelia-view-manager', './criteriaBuilder
           for (var column in columns) {
             var columnName = entityName ? entityName + '.' + column : column;
 
-            if (excludeColumns.indexOf(columnName) > -1) {
+            if (excludeColumns.indexOf(entityName) > -1 || excludeColumns.indexOf(columnName) > -1) {
               continue;
             }
 
