@@ -75,7 +75,7 @@ define(['exports', 'aurelia-framework', 'aurelia-view-manager', './criteriaBuild
     throw new Error('Decorating class property failed. Please ensure that transform-class-properties is enabled.');
   }
 
-  var _dec, _dec2, _dec3, _class, _desc, _value, _class2, _descriptor, _descriptor2, _descriptor3, _descriptor4;
+  var _dec, _dec2, _dec3, _class, _desc, _value, _class2, _descriptor, _descriptor2, _descriptor3, _descriptor4, _descriptor5;
 
   var Filter = exports.Filter = (_dec = (0, _aureliaFramework.customElement)('filter'), _dec2 = (0, _aureliaViewManager.resolvedView)('spoonx/filter', 'filter'), _dec3 = (0, _aureliaFramework.bindable)({ defaultBindingMode: _aureliaFramework.bindingMode.twoWay }), _dec(_class = _dec2(_class = (_class2 = function (_CriteriaBuilder) {
     _inherits(Filter, _CriteriaBuilder);
@@ -91,7 +91,9 @@ define(['exports', 'aurelia-framework', 'aurelia-view-manager', './criteriaBuild
 
       _initDefineProp(_this, 'entity', _descriptor3, _this);
 
-      _initDefineProp(_this, 'excludeColumns', _descriptor4, _this);
+      _initDefineProp(_this, 'showIdColumns', _descriptor4, _this);
+
+      _initDefineProp(_this, 'excludeColumns', _descriptor5, _this);
 
       _this.filters = [];
       _this.fieldElement = {
@@ -280,10 +282,14 @@ define(['exports', 'aurelia-framework', 'aurelia-view-manager', './criteriaBuild
     Filter.prototype.generateFields = function generateFields(columns, entityName) {
       var excludeColumns = this.excludeColumns ? this.excludeColumns.replace(/\s/g, '').split(',') : [];
 
+      if (this.showIdColumns) {
+        columns.id = 'number';
+      }
+
       for (var column in columns) {
         var columnName = entityName ? entityName + '.' + column : column;
 
-        if (excludeColumns.indexOf(entityName) > -1 || excludeColumns.indexOf(columnName) > -1) {
+        if (entityName && (excludeColumns.indexOf(entityName) > -1 || excludeColumns.indexOf(columnName) > -1)) {
           continue;
         }
 
@@ -311,7 +317,12 @@ define(['exports', 'aurelia-framework', 'aurelia-view-manager', './criteriaBuild
     initializer: function initializer() {
       return null;
     }
-  }), _descriptor4 = _applyDecoratedDescriptor(_class2.prototype, 'excludeColumns', [_aureliaFramework.bindable], {
+  }), _descriptor4 = _applyDecoratedDescriptor(_class2.prototype, 'showIdColumns', [_aureliaFramework.bindable], {
+    enumerable: true,
+    initializer: function initializer() {
+      return true;
+    }
+  }), _descriptor5 = _applyDecoratedDescriptor(_class2.prototype, 'excludeColumns', [_aureliaFramework.bindable], {
     enumerable: true,
     initializer: null
   })), _class2)) || _class) || _class);

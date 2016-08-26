@@ -8,20 +8,21 @@ export class Filter extends CriteriaBuilder {
   @bindable({defaultBindingMode: bindingMode.twoWay}) criteria = {};
   @bindable columns                                            = [];
   @bindable entity                                             = null;
+  @bindable showIdColumns                                      = true;
   @bindable excludeColumns;
 
   filters      = [];
   fieldElement = {
-    key: 'field',
-    type: 'select',
-    label: false,
+    key    : 'field',
+    type   : 'select',
+    label  : false,
     options: []
   };
 
   operatorElement = {
-    key: 'operator',
-    type: 'select',
-    label: false,
+    key    : 'operator',
+    type   : 'select',
+    label  : false,
     options: [
       {name: 'equals', value: 'equals'},
       {name: 'not equals', value: 'not'},
@@ -39,9 +40,9 @@ export class Filter extends CriteriaBuilder {
   };
 
   valueElement = {
-    key: 'value',
-    type: 'string',
-    label: false,
+    key       : 'value',
+    type      : 'string',
+    label     : false,
     attributes: {
       style: 'margin-bottom: 0' // button group styling issue
     }
@@ -124,10 +125,10 @@ export class Filter extends CriteriaBuilder {
 
   create(blockIndex, data) {
     let filter = {
-      field: this.fieldElement,
+      field   : this.fieldElement,
       operator: this.operatorElement,
-      value: Object.create(this.valueElement),
-      data: data || {}
+      value   : Object.create(this.valueElement),
+      data    : data || {}
     };
 
     // create filter
@@ -213,18 +214,22 @@ export class Filter extends CriteriaBuilder {
   generateFields(columns, entityName) {
     let excludeColumns = (this.excludeColumns) ? this.excludeColumns.replace(/\s/g, '').split(',') : [];
 
+    if (this.showIdColumns) {
+      columns.id = 'number';
+    }
+
     for (let column in columns) {
       let columnName = (entityName) ? entityName + '.' + column : column;
 
       // ignore entire or part of a association
-      if (excludeColumns.indexOf(entityName) > -1 || excludeColumns.indexOf(columnName) > -1) {
+      if (entityName && (excludeColumns.indexOf(entityName) > -1 || excludeColumns.indexOf(columnName) > -1)) {
         continue;
       }
 
       this.columns.push({
-        name: columnName,
+        name : columnName,
         value: columnName,
-        type: columns[column] || 'string'
+        type : columns[column] || 'string'
       });
     }
   }

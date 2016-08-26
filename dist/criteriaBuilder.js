@@ -53,7 +53,7 @@ export class CriteriaBuilder {
     }
 
     return {
-      [valueOperator]: data.value,
+      [valueOperator]  : data.value,
       [betweenOperator]: data.between
     };
   }

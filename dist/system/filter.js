@@ -3,7 +3,7 @@
 System.register(['aurelia-framework', 'aurelia-view-manager', './criteriaBuilder'], function (_export, _context) {
   "use strict";
 
-  var customElement, bindable, bindingMode, resolvedView, CriteriaBuilder, _dec, _dec2, _dec3, _class, _desc, _value, _class2, _descriptor, _descriptor2, _descriptor3, _descriptor4, Filter;
+  var customElement, bindable, bindingMode, resolvedView, CriteriaBuilder, _dec, _dec2, _dec3, _class, _desc, _value, _class2, _descriptor, _descriptor2, _descriptor3, _descriptor4, _descriptor5, Filter;
 
   function _initDefineProp(target, property, descriptor, context) {
     if (!descriptor) return;
@@ -99,7 +99,9 @@ System.register(['aurelia-framework', 'aurelia-view-manager', './criteriaBuilder
 
           _initDefineProp(_this, 'entity', _descriptor3, _this);
 
-          _initDefineProp(_this, 'excludeColumns', _descriptor4, _this);
+          _initDefineProp(_this, 'showIdColumns', _descriptor4, _this);
+
+          _initDefineProp(_this, 'excludeColumns', _descriptor5, _this);
 
           _this.filters = [];
           _this.fieldElement = {
@@ -288,10 +290,14 @@ System.register(['aurelia-framework', 'aurelia-view-manager', './criteriaBuilder
         Filter.prototype.generateFields = function generateFields(columns, entityName) {
           var excludeColumns = this.excludeColumns ? this.excludeColumns.replace(/\s/g, '').split(',') : [];
 
+          if (this.showIdColumns) {
+            columns.id = 'number';
+          }
+
           for (var column in columns) {
             var columnName = entityName ? entityName + '.' + column : column;
 
-            if (excludeColumns.indexOf(entityName) > -1 || excludeColumns.indexOf(columnName) > -1) {
+            if (entityName && (excludeColumns.indexOf(entityName) > -1 || excludeColumns.indexOf(columnName) > -1)) {
               continue;
             }
 
@@ -319,7 +325,12 @@ System.register(['aurelia-framework', 'aurelia-view-manager', './criteriaBuilder
         initializer: function initializer() {
           return null;
         }
-      }), _descriptor4 = _applyDecoratedDescriptor(_class2.prototype, 'excludeColumns', [bindable], {
+      }), _descriptor4 = _applyDecoratedDescriptor(_class2.prototype, 'showIdColumns', [bindable], {
+        enumerable: true,
+        initializer: function initializer() {
+          return true;
+        }
+      }), _descriptor5 = _applyDecoratedDescriptor(_class2.prototype, 'excludeColumns', [bindable], {
         enumerable: true,
         initializer: null
       })), _class2)) || _class) || _class));

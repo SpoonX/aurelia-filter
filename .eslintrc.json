@@ -2,8 +2,8 @@
   "extends": "./node_modules/aurelia-tools/.eslintrc.json",
   "rules": {
     "consistent-return": 0,
-    "key-spacing"      : {
+    "key-spacing"      : [2, {
       "align": "colon"
-    }
+    }]
   }
 }
