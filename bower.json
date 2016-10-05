@@ -1,6 +1,6 @@
 {
   "name": "aurelia-filter",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "A plugin for aurelia to populate search/filter criteria. Works well with aurelia-orm.",
   "keywords": [
     "aurelia",
@@ -18,9 +18,9 @@
     "url": "git+ssh://git@github.com/SpoonX/aurelia-filter.git"
   },
   "dependencies": {
-      "aurelia-form": "^0.1.6",
-      "aurelia-framework": "^1.0.0-rc.1.0.0",
-      "aurelia-view-manager": "^0.0.5",
-      "extend": "^3.0.0"
+    "aurelia-form": "^0.3.0",
+    "aurelia-framework": "^1.0.0",
+    "aurelia-view-manager": "^0.1.0",
+    "extend": "^3.0.0"
   }
 }
