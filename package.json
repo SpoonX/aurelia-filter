@@ -1,6 +1,6 @@
 {
   "name": "aurelia-filter",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "A plugin for aurelia to populate search/filter criteria. Works well with aurelia-orm.",
   "keywords": [
     "aurelia",
@@ -32,29 +32,29 @@
       "dist": "dist/amd"
     },
     "dependencies": {
-      "aurelia-form": "^0.1.6",
-      "aurelia-framework": "^1.0.0-rc.1.0.0",
-      "aurelia-view-manager": "^0.0.5",
+      "aurelia-form": "^0.3.0",
+      "aurelia-framework": "^1.0.0",
+      "aurelia-view-manager": "^0.1.0",
       "extend": "^3.0.0"
     },
     "peerDependencies": {
-      "aurelia-form": "^0.1.6",
-      "aurelia-framework": "^1.0.0-rc.1.0.0",
-      "aurelia-view-manager": "^0.0.5",
+      "aurelia-form": "^0.3.0",
+      "aurelia-framework": "^1.0.0",
+      "aurelia-view-manager": "^0.1.0",
       "extend": "^3.0.0"
     },
     "devDependencies": {
-      "aurelia-bootstrapper": "^1.0.0-rc.1.0.0",
-      "aurelia-dependency-injection": "^1.0.0-rc.1.0.0",
-      "aurelia-pal-browser": "^1.0.0-rc.1.0.0",
-      "aurelia-polyfills": "^1.0.0-rc.1.0.0",
+      "aurelia-bootstrapper": "^1.0.0",
+      "aurelia-dependency-injection": "^1.0.0",
+      "aurelia-pal-browser": "^1.0.0",
+      "aurelia-polyfills": "^1.0.0",
       "aurelia-testing": "^1.0.0-beta.1.0.3"
     }
   },
   "dependencies": {
-    "aurelia-form": "^0.1.6",
-    "aurelia-framework": "^1.0.0-rc.1.0.0",
-    "aurelia-view-manager": "^0.0.5",
+    "aurelia-form": "^0.3.0",
+    "aurelia-framework": "^1.0.0",
+    "aurelia-view-manager": "^0.1.0",
     "extend": "^3.0.0"
   },
   "devDependencies": {

@@ -1,3 +1,7 @@
+<a name="1.0.1"></a>
+## [1.0.1](https://github.com/SpoonX/aurelia-filter/compare/0.0.6...v1.0.1) (2016-10-05)
+
+
 <a name="1.0.0"></a>
 # 1.0.0 (2016-08-23)
 
