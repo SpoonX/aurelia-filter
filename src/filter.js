@@ -61,7 +61,11 @@ export class Filter extends CriteriaBuilder {
 
     // Do we need to set pre-defined values for the filter?
     if (this.criteria.where && Object.keys(this.criteria.where).length) {
-      return this.parseCriteria(this.criteria.where);
+      this.parseCriteria(this.criteria.where);
+
+      if (this.filters.length > 0) {
+        return;
+      }
     }
 
     this.valueElement.type = this.columns[0].type || 'string'; // set the initial valueElement `type`
@@ -124,6 +128,16 @@ export class Filter extends CriteriaBuilder {
   }
 
   create(blockIndex, data) {
+    if (data && data.field) {
+      let options = this.fieldElement.options.map(option => {
+        return option.name;
+      });
+
+      if (options.indexOf(data.field) < 0) {
+        return;
+      }
+    }
+
     let filter = {
       field   : this.fieldElement,
       operator: this.operatorElement,
