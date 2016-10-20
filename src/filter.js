@@ -129,9 +129,7 @@ export class Filter extends CriteriaBuilder {
 
   create(blockIndex, data) {
     if (data && data.field) {
-      let options = this.fieldElement.options.map(option => {
-        return option.name;
-      });
+      let options = this.fieldElement.options.map(option => option.name);
 
       if (options.indexOf(data.field) < 0) {
         return;
