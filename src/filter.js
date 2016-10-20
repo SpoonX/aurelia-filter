@@ -63,6 +63,7 @@ export class Filter extends CriteriaBuilder {
     if (this.criteria.where && Object.keys(this.criteria.where).length) {
       this.parseCriteria(this.criteria.where);
 
+      // check if parseCriteria added a valid filter, otherwise create a empty one
       if (this.filters.length > 0) {
         return;
       }
@@ -128,6 +129,7 @@ export class Filter extends CriteriaBuilder {
   }
 
   create(blockIndex, data) {
+    // prevent adding a non-existing field to the filter (leads to selecting the wrong field in the dropdown)
     if (data && data.field) {
       let options = this.fieldElement.options.map(option => option.name);
 
