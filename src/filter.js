@@ -61,7 +61,12 @@ export class Filter extends CriteriaBuilder {
 
     // Do we need to set pre-defined values for the filter?
     if (this.criteria.where && Object.keys(this.criteria.where).length) {
-      return this.parseCriteria(this.criteria.where);
+      this.parseCriteria(this.criteria.where);
+
+      // check if parseCriteria added a valid filter, otherwise create a empty one
+      if (this.filters.length > 0) {
+        return;
+      }
     }
 
     this.valueElement.type = this.columns[0].type || 'string'; // set the initial valueElement `type`
@@ -124,6 +129,15 @@ export class Filter extends CriteriaBuilder {
   }
 
   create(blockIndex, data) {
+    // prevent adding a non-existing field to the filter (leads to selecting the wrong field in the dropdown)
+    if (data && data.field) {
+      let options = this.fieldElement.options.map(option => option.name);
+
+      if (options.indexOf(data.field) < 0) {
+        return;
+      }
+    }
+
     let filter = {
       field   : this.fieldElement,
       operator: this.operatorElement,
