@@ -57,6 +57,7 @@ export class Filter extends CriteriaBuilder {
 
     this.fieldElement.options = this.columns;
 
+    //eslint-disable-next-line array-callback-return
     this.fieldElement.options.map(filter => {
       this.fieldTypes[filter.name] = filter.type;
     });
@@ -142,6 +143,7 @@ export class Filter extends CriteriaBuilder {
     // determine the `type` of the field
     let valueElement  = Object.create(this.valueElement);
     let fieldName     = data ? data.field : this.columns[0].name;
+
     valueElement.type = this.fieldTypes[fieldName] || 'string';
 
     let filter = {
@@ -216,21 +218,23 @@ export class Filter extends CriteriaBuilder {
     let repositories = this.entity.getRepository().entityManager.repositories;
 
     for (let association in metaData.associations) {
-      if (metaData.associations.hasOwnProperty(association)) {
-        let entityName = metaData.associations[association].entity;
-
-        if (!repositories[entityName]) {
-          return;
-        }
-
-        let repoData = repositories[entityName].getMeta().metadata.types; // no `asObject` method available
-
-        if (!repoData) {
-          continue;
-        }
-
-        this.generateFields(repoData, entityName);
+      if (!metaData.associations.hasOwnProperty(association)) {
+        continue;
       }
+
+      let entityName = metaData.associations[association].entity;
+
+      if (!repositories[entityName]) {
+        return;
+      }
+
+      let repoData = repositories[entityName].getMeta().metadata.types; // no `asObject` method available
+
+      if (!repoData) {
+        continue;
+      }
+
+      this.generateFields(repoData, entityName);
     }
   }
 
@@ -242,20 +246,22 @@ export class Filter extends CriteriaBuilder {
     }
 
     for (let column in columns) {
-      if (columns.hasOwnProperty(column)) {
-        let columnName = (entityName) ? entityName + '.' + column : column;
-
-        // ignore entire or part of a association OR specific field(s)
-        if ((entityName && excludeColumns.indexOf(entityName) > -1) || excludeColumns.indexOf(columnName) > -1) {
-          continue;
-        }
-
-        this.columns.push({
-          name : columnName,
-          value: columnName,
-          type : columns[column] || 'string'
-        });
+      if (!columns.hasOwnProperty(column)) {
+        continue;
       }
+
+      let columnName = (entityName) ? entityName + '.' + column : column;
+
+      // ignore entire or part of a association OR specific field(s)
+      if ((entityName && excludeColumns.indexOf(entityName) > -1) || excludeColumns.indexOf(columnName) > -1) {
+        continue;
+      }
+
+      this.columns.push({
+        name : columnName,
+        value: columnName,
+        type : columns[column] || 'string'
+      });
     }
   }
 }
