@@ -1,13 +1,21 @@
 # Installation
 
+## Uses
+
+Aurelia-filter needs following plugins installed and configured:
+
+* [aurelia-form](https://www.npmjs.com/package/aurelia-form)
+* [aurelia-view-manager](https://www.npmjs.com/package/aurelia-view-manager)
+
 ## Aureli-Cli
 
 Run `npm i aurelia-filter --save` from your project root.
 
-Add following to the `build.bundles.dependencies` section of `aurelia-project/aurelia.json`:
+Aurelia-filter uses `extend`, so add following to the `build.bundles.dependencies` section of `aurelia-project/aurelia.json`:
 
 ```js
 "dependencies": [
+  "extend", 
   {
     "name": "aurelia-filter",
     "path": "../node_modules/aurelia-filter/dist/amd",
@@ -24,9 +32,10 @@ Add following to the `build.bundles.dependencies` section of `aurelia-project/au
 
 Run `jspm i aurelia-filter` from your project root.
 
-Add following to the `bundles.dist.aurelia.includes` section of `build/bundles.js`:
+Aurelia-filter uses `extend`, so add following to the `bundles.dist.aurelia.includes` section of `build/bundles.js`:
 
 ```js
+  "extend",
   "aurelia-filter",
   "[aurelia-filter/**/*.js]",
   "aurelia-filter/**/*.html!text",
