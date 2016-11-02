@@ -12,6 +12,8 @@ export class Filter extends CriteriaBuilder {
   @bindable excludeColumns;
 
   filters      = [];
+  fieldTypes   = [];
+
   fieldElement = {
     key    : 'field',
     type   : 'select',
@@ -59,6 +61,10 @@ export class Filter extends CriteriaBuilder {
 
     this.fieldElement.options = this.columns;
 
+    this.fieldElement.options.map(filter => {
+      this.fieldTypes[filter.name] = filter.type;
+    });
+
     // Do we need to set pre-defined values for the filter?
     if (this.criteria.where && Object.keys(this.criteria.where).length) {
       this.parseCriteria(this.criteria.where);
@@ -69,7 +75,6 @@ export class Filter extends CriteriaBuilder {
       }
     }
 
-    this.valueElement.type = this.columns[0].type || 'string'; // set the initial valueElement `type`
     this.create();
   }
 
@@ -138,10 +143,15 @@ export class Filter extends CriteriaBuilder {
       }
     }
 
+    // determine the `type` of the field
+    let valueElement  = Object.create(this.valueElement);
+    let fieldName     = data ? data.field : this.columns[0].name;
+    valueElement.type = this.fieldTypes[fieldName] || 'string';
+
     let filter = {
       field   : this.fieldElement,
       operator: this.operatorElement,
-      value   : Object.create(this.valueElement),
+      value   : valueElement,
       data    : data || {}
     };
 
