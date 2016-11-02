@@ -4,9 +4,10 @@
   "description": "A plugin for aurelia to populate search/filter criteria. Works well with aurelia-orm.",
   "keywords": [
     "aurelia",
+    "spoonx",
+    "plugin",
     "filter",
-    "criteria",
-    "spoonx"
+    "criteria"
   ],
   "homepage": "https://github.com/SpoonX/aurelia-filter#readme",
   "bugs": {
@@ -62,12 +63,12 @@
     "extend": "^3.0.0"
   },
   "devDependencies": {
-    "spoonx-tools": "^0.4.0"
+    "spoonx-tools": "^1.0.0-0"
   },
   "aurelia": {
     "build": {
       "resources": [
-        "aurelia-orm/bootstrap/filter.html"
+        "aurelia-filter/bootstrap/filter.html"
       ]
     }
   }
