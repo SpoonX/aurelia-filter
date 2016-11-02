@@ -50,10 +50,6 @@ export class Filter extends CriteriaBuilder {
     }
   };
 
-  constructor() {
-    super();
-  }
-
   attached() {
     if (this.entity) {
       this.getEntityFields();
@@ -218,20 +214,23 @@ export class Filter extends CriteriaBuilder {
 
     // get the columns of the entity associations
     let repositories = this.entity.getRepository().entityManager.repositories;
+
     for (let association in metaData.associations) {
-      let entityName = metaData.associations[association].entity;
+      if (metaData.associations.hasOwnProperty(association)) {
+        let entityName = metaData.associations[association].entity;
 
-      if (!repositories[entityName]) {
-        return;
+        if (!repositories[entityName]) {
+          return;
+        }
+
+        let repoData = repositories[entityName].getMeta().metadata.types; // no `asObject` method available
+
+        if (!repoData) {
+          continue;
+        }
+
+        this.generateFields(repoData, entityName);
       }
-
-      let repoData = repositories[entityName].getMeta().metadata.types; // no `asObject` method available
-
-      if (!repoData) {
-        continue;
-      }
-
-      this.generateFields(repoData, entityName);
     }
   }
 
@@ -243,18 +242,20 @@ export class Filter extends CriteriaBuilder {
     }
 
     for (let column in columns) {
-      let columnName = (entityName) ? entityName + '.' + column : column;
+      if (columns.hasOwnProperty(column)) {
+        let columnName = (entityName) ? entityName + '.' + column : column;
 
-      // ignore entire or part of a association OR specific field(s)
-      if ((entityName && excludeColumns.indexOf(entityName) > -1) || excludeColumns.indexOf(columnName) > -1) {
-        continue;
+        // ignore entire or part of a association OR specific field(s)
+        if ((entityName && excludeColumns.indexOf(entityName) > -1) || excludeColumns.indexOf(columnName) > -1) {
+          continue;
+        }
+
+        this.columns.push({
+          name : columnName,
+          value: columnName,
+          type : columns[column] || 'string'
+        });
       }
-
-      this.columns.push({
-        name : columnName,
-        value: columnName,
-        type : columns[column] || 'string'
-      });
     }
   }
 }
