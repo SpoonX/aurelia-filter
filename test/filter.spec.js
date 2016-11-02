@@ -16,7 +16,7 @@ describe('Filter', () => {
     component.configure = function(aurelia) {
       aurelia.use
         .standardConfiguration()
-        .plugin('aurelia-filter');
+        .feature('src', config => {});
     };
   });
 
