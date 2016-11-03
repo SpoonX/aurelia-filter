@@ -58,8 +58,8 @@ export var CriteriaBuilder = function () {
   CriteriaBuilder.prototype.parseBetween = function parseBetween(data) {
     var _ref2;
 
-    var valueOperator = arguments.length <= 1 || arguments[1] === undefined ? '>=' : arguments[1];
-    var betweenOperator = arguments.length <= 2 || arguments[2] === undefined ? '<=' : arguments[2];
+    var valueOperator = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : '>=';
+    var betweenOperator = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : '<=';
 
     if (!this.hasValue(data.between)) {
       return;

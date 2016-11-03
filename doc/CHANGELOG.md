@@ -1,3 +1,19 @@
+<a name="1.0.2"></a>
+## [1.0.2](https://github.com/SpoonX/aurelia-filter/compare/1.0.1...v1.0.2) (2016-11-03)
+
+
+### Bug Fixes
+
+* **criteria:** check for invalid attributes ([941f11b](https://github.com/SpoonX/aurelia-filter/commit/941f11b))
+* **criteria:** determine input type when given a criteria ([b173059](https://github.com/SpoonX/aurelia-filter/commit/b173059))
+
+
+### Features
+
+* **exclude:** Exclude column not based on association ([7a503f7](https://github.com/SpoonX/aurelia-filter/commit/7a503f7))
+
+
+
 <a name="1.0.1"></a>
 ## [1.0.1](https://github.com/SpoonX/aurelia-filter/compare/0.0.6...v1.0.1) (2016-10-05)
 

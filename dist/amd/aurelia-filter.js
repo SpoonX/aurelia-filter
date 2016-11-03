@@ -1,4 +1,4 @@
-define(['exports', 'aurelia-view-manager'], function (exports, _aureliaViewManager) {
+define(['exports', 'aurelia-view-manager', './criteriaBuilder'], function (exports, _aureliaViewManager, _criteriaBuilder) {
   'use strict';
 
   Object.defineProperty(exports, "__esModule", {

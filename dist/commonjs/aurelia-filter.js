@@ -7,6 +7,8 @@ exports.configure = configure;
 
 var _aureliaViewManager = require('aurelia-view-manager');
 
+var _criteriaBuilder = require('./criteriaBuilder');
+
 function configure(aurelia) {
   aurelia.plugin('aurelia-form');
 

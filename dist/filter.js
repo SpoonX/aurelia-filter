@@ -12,6 +12,8 @@ export class Filter extends CriteriaBuilder {
   @bindable excludeColumns;
 
   filters      = [];
+  fieldTypes   = [];
+
   fieldElement = {
     key    : 'field',
     type   : 'select',
@@ -48,10 +50,6 @@ export class Filter extends CriteriaBuilder {
     }
   };
 
-  constructor() {
-    super();
-  }
-
   attached() {
     if (this.entity) {
       this.getEntityFields();
@@ -59,12 +57,21 @@ export class Filter extends CriteriaBuilder {
 
     this.fieldElement.options = this.columns;
 
+    //eslint-disable-next-line array-callback-return
+    this.fieldElement.options.map(filter => {
+      this.fieldTypes[filter.name] = filter.type;
+    });
+
     // Do we need to set pre-defined values for the filter?
     if (this.criteria.where && Object.keys(this.criteria.where).length) {
-      return this.parseCriteria(this.criteria.where);
+      this.parseCriteria(this.criteria.where);
+
+      // check if parseCriteria added a valid filter, otherwise create a empty one
+      if (this.filters.length > 0) {
+        return;
+      }
     }
 
-    this.valueElement.type = this.columns[0].type || 'string'; // set the initial valueElement `type`
     this.create();
   }
 
@@ -124,10 +131,25 @@ export class Filter extends CriteriaBuilder {
   }
 
   create(blockIndex, data) {
+    // prevent adding a non-existing field to the filter (leads to selecting the wrong field in the dropdown)
+    if (data && data.field) {
+      let options = this.fieldElement.options.map(option => option.name);
+
+      if (options.indexOf(data.field) < 0) {
+        return;
+      }
+    }
+
+    // determine the `type` of the field
+    let valueElement  = Object.create(this.valueElement);
+    let fieldName     = data ? data.field : this.columns[0].name;
+
+    valueElement.type = this.fieldTypes[fieldName] || 'string';
+
     let filter = {
       field   : this.fieldElement,
       operator: this.operatorElement,
-      value   : Object.create(this.valueElement),
+      value   : valueElement,
       data    : data || {}
     };
 
@@ -194,7 +216,12 @@ export class Filter extends CriteriaBuilder {
 
     // get the columns of the entity associations
     let repositories = this.entity.getRepository().entityManager.repositories;
+
     for (let association in metaData.associations) {
+      if (!metaData.associations.hasOwnProperty(association)) {
+        continue;
+      }
+
       let entityName = metaData.associations[association].entity;
 
       if (!repositories[entityName]) {
@@ -219,10 +246,14 @@ export class Filter extends CriteriaBuilder {
     }
 
     for (let column in columns) {
+      if (!columns.hasOwnProperty(column)) {
+        continue;
+      }
+
       let columnName = (entityName) ? entityName + '.' + column : column;
 
-      // ignore entire or part of a association
-      if (entityName && (excludeColumns.indexOf(entityName) > -1 || excludeColumns.indexOf(columnName) > -1)) {
+      // ignore entire or part of a association OR specific field(s)
+      if ((entityName && excludeColumns.indexOf(entityName) > -1) || excludeColumns.indexOf(columnName) > -1) {
         continue;
       }
 

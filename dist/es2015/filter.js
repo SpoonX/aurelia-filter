@@ -48,40 +48,26 @@ import { resolvedView } from 'aurelia-view-manager';
 import { CriteriaBuilder } from './criteriaBuilder';
 
 export let Filter = (_dec = customElement('filter'), _dec2 = resolvedView('spoonx/filter', 'filter'), _dec3 = bindable({ defaultBindingMode: bindingMode.twoWay }), _dec(_class = _dec2(_class = (_class2 = class Filter extends CriteriaBuilder {
+  constructor(...args) {
+    var _temp;
 
-  constructor() {
-    super();
-
-    _initDefineProp(this, 'criteria', _descriptor, this);
-
-    _initDefineProp(this, 'columns', _descriptor2, this);
-
-    _initDefineProp(this, 'entity', _descriptor3, this);
-
-    _initDefineProp(this, 'showIdColumns', _descriptor4, this);
-
-    _initDefineProp(this, 'excludeColumns', _descriptor5, this);
-
-    this.filters = [];
-    this.fieldElement = {
+    return _temp = super(...args), _initDefineProp(this, 'criteria', _descriptor, this), _initDefineProp(this, 'columns', _descriptor2, this), _initDefineProp(this, 'entity', _descriptor3, this), _initDefineProp(this, 'showIdColumns', _descriptor4, this), _initDefineProp(this, 'excludeColumns', _descriptor5, this), this.filters = [], this.fieldTypes = [], this.fieldElement = {
       key: 'field',
       type: 'select',
       label: false,
       options: []
-    };
-    this.operatorElement = {
+    }, this.operatorElement = {
       key: 'operator',
       type: 'select',
       label: false,
       options: [{ name: 'equals', value: 'equals' }, { name: 'not equals', value: 'not' }, { name: 'in', value: 'in' }, { name: 'not in', value: '!' }, { name: 'contains', value: 'contains' }, { name: 'begins with', value: 'startsWith' }, { name: 'ends with', value: 'endsWith' }, { name: 'between', value: 'between' }, { name: 'greater than', value: 'greaterThan' }, { name: 'less than', value: 'lessThan' }, { name: 'less or equal than', value: 'lessThanOrEqual' }, { name: 'greater or equal than', value: 'greaterThanOrEqual' }]
-    };
-    this.valueElement = {
+    }, this.valueElement = {
       key: 'value',
       type: 'string',
       label: false,
       attributes: {
         style: 'margin-bottom: 0' }
-    };
+    }, _temp;
   }
 
   attached() {
@@ -91,11 +77,18 @@ export let Filter = (_dec = customElement('filter'), _dec2 = resolvedView('spoon
 
     this.fieldElement.options = this.columns;
 
+    this.fieldElement.options.map(filter => {
+      this.fieldTypes[filter.name] = filter.type;
+    });
+
     if (this.criteria.where && Object.keys(this.criteria.where).length) {
-      return this.parseCriteria(this.criteria.where);
+      this.parseCriteria(this.criteria.where);
+
+      if (this.filters.length > 0) {
+        return;
+      }
     }
 
-    this.valueElement.type = this.columns[0].type || 'string';
     this.create();
   }
 
@@ -150,10 +143,23 @@ export let Filter = (_dec = customElement('filter'), _dec2 = resolvedView('spoon
   }
 
   create(blockIndex, data) {
+    if (data && data.field) {
+      let options = this.fieldElement.options.map(option => option.name);
+
+      if (options.indexOf(data.field) < 0) {
+        return;
+      }
+    }
+
+    let valueElement = Object.create(this.valueElement);
+    let fieldName = data ? data.field : this.columns[0].name;
+
+    valueElement.type = this.fieldTypes[fieldName] || 'string';
+
     let filter = {
       field: this.fieldElement,
       operator: this.operatorElement,
-      value: Object.create(this.valueElement),
+      value: valueElement,
       data: data || {}
     };
 
@@ -213,7 +219,12 @@ export let Filter = (_dec = customElement('filter'), _dec2 = resolvedView('spoon
     }
 
     let repositories = this.entity.getRepository().entityManager.repositories;
+
     for (let association in metaData.associations) {
+      if (!metaData.associations.hasOwnProperty(association)) {
+        continue;
+      }
+
       let entityName = metaData.associations[association].entity;
 
       if (!repositories[entityName]) {
@@ -238,9 +249,13 @@ export let Filter = (_dec = customElement('filter'), _dec2 = resolvedView('spoon
     }
 
     for (let column in columns) {
+      if (!columns.hasOwnProperty(column)) {
+        continue;
+      }
+
       let columnName = entityName ? entityName + '.' + column : column;
 
-      if (entityName && (excludeColumns.indexOf(entityName) > -1 || excludeColumns.indexOf(columnName) > -1)) {
+      if (entityName && excludeColumns.indexOf(entityName) > -1 || excludeColumns.indexOf(columnName) > -1) {
         continue;
       }
 

@@ -81,72 +81,71 @@ define(['exports', 'aurelia-framework', 'aurelia-view-manager', './criteriaBuild
     _inherits(Filter, _CriteriaBuilder);
 
     function Filter() {
+      var _temp, _this, _ret;
+
       
 
-      var _this = _possibleConstructorReturn(this, _CriteriaBuilder.call(this));
+      for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+        args[_key] = arguments[_key];
+      }
 
-      _initDefineProp(_this, 'criteria', _descriptor, _this);
-
-      _initDefineProp(_this, 'columns', _descriptor2, _this);
-
-      _initDefineProp(_this, 'entity', _descriptor3, _this);
-
-      _initDefineProp(_this, 'showIdColumns', _descriptor4, _this);
-
-      _initDefineProp(_this, 'excludeColumns', _descriptor5, _this);
-
-      _this.filters = [];
-      _this.fieldElement = {
+      return _ret = (_temp = (_this = _possibleConstructorReturn(this, _CriteriaBuilder.call.apply(_CriteriaBuilder, [this].concat(args))), _this), _initDefineProp(_this, 'criteria', _descriptor, _this), _initDefineProp(_this, 'columns', _descriptor2, _this), _initDefineProp(_this, 'entity', _descriptor3, _this), _initDefineProp(_this, 'showIdColumns', _descriptor4, _this), _initDefineProp(_this, 'excludeColumns', _descriptor5, _this), _this.filters = [], _this.fieldTypes = [], _this.fieldElement = {
         key: 'field',
         type: 'select',
         label: false,
         options: []
-      };
-      _this.operatorElement = {
+      }, _this.operatorElement = {
         key: 'operator',
         type: 'select',
         label: false,
         options: [{ name: 'equals', value: 'equals' }, { name: 'not equals', value: 'not' }, { name: 'in', value: 'in' }, { name: 'not in', value: '!' }, { name: 'contains', value: 'contains' }, { name: 'begins with', value: 'startsWith' }, { name: 'ends with', value: 'endsWith' }, { name: 'between', value: 'between' }, { name: 'greater than', value: 'greaterThan' }, { name: 'less than', value: 'lessThan' }, { name: 'less or equal than', value: 'lessThanOrEqual' }, { name: 'greater or equal than', value: 'greaterThanOrEqual' }]
-      };
-      _this.valueElement = {
+      }, _this.valueElement = {
         key: 'value',
         type: 'string',
         label: false,
         attributes: {
           style: 'margin-bottom: 0' }
-      };
-      return _this;
+      }, _temp), _possibleConstructorReturn(_this, _ret);
     }
 
     Filter.prototype.attached = function attached() {
+      var _this2 = this;
+
       if (this.entity) {
         this.getEntityFields();
       }
 
       this.fieldElement.options = this.columns;
 
+      this.fieldElement.options.map(function (filter) {
+        _this2.fieldTypes[filter.name] = filter.type;
+      });
+
       if (this.criteria.where && Object.keys(this.criteria.where).length) {
-        return this.parseCriteria(this.criteria.where);
+        this.parseCriteria(this.criteria.where);
+
+        if (this.filters.length > 0) {
+          return;
+        }
       }
 
-      this.valueElement.type = this.columns[0].type || 'string';
       this.create();
     };
 
     Filter.prototype.parseCriteria = function parseCriteria(criteriaWhere) {
-      var _this2 = this;
+      var _this3 = this;
 
       var data = {};
 
       if (criteriaWhere.or) {
         criteriaWhere.or.forEach(function (block, i) {
           Object.keys(block).forEach(function (field) {
-            data = Object.assign(_this2.buildFieldData(block[field]), { field: field });
-            if (!_this2.filters[i]) {
-              return _this2.create(undefined, data);
+            data = Object.assign(_this3.buildFieldData(block[field]), { field: field });
+            if (!_this3.filters[i]) {
+              return _this3.create(undefined, data);
             }
 
-            _this2.create(i, data);
+            _this3.create(i, data);
           });
         });
 
@@ -154,12 +153,12 @@ define(['exports', 'aurelia-framework', 'aurelia-view-manager', './criteriaBuild
       }
 
       Object.keys(criteriaWhere).forEach(function (field, i) {
-        data = Object.assign(_this2.buildFieldData(criteriaWhere[field]), { field: field });
+        data = Object.assign(_this3.buildFieldData(criteriaWhere[field]), { field: field });
         if (i === 0) {
-          return _this2.create(undefined, data);
+          return _this3.create(undefined, data);
         }
 
-        _this2.create(0, data);
+        _this3.create(0, data);
       });
     };
 
@@ -186,10 +185,25 @@ define(['exports', 'aurelia-framework', 'aurelia-view-manager', './criteriaBuild
     };
 
     Filter.prototype.create = function create(blockIndex, data) {
+      if (data && data.field) {
+        var options = this.fieldElement.options.map(function (option) {
+          return option.name;
+        });
+
+        if (options.indexOf(data.field) < 0) {
+          return;
+        }
+      }
+
+      var valueElement = Object.create(this.valueElement);
+      var fieldName = data ? data.field : this.columns[0].name;
+
+      valueElement.type = this.fieldTypes[fieldName] || 'string';
+
       var filter = {
         field: this.fieldElement,
         operator: this.operatorElement,
-        value: Object.create(this.valueElement),
+        value: valueElement,
         data: data || {}
       };
 
@@ -262,7 +276,12 @@ define(['exports', 'aurelia-framework', 'aurelia-view-manager', './criteriaBuild
       }
 
       var repositories = this.entity.getRepository().entityManager.repositories;
+
       for (var association in metaData.associations) {
+        if (!metaData.associations.hasOwnProperty(association)) {
+          continue;
+        }
+
         var entityName = metaData.associations[association].entity;
 
         if (!repositories[entityName]) {
@@ -287,9 +306,13 @@ define(['exports', 'aurelia-framework', 'aurelia-view-manager', './criteriaBuild
       }
 
       for (var column in columns) {
+        if (!columns.hasOwnProperty(column)) {
+          continue;
+        }
+
         var columnName = entityName ? entityName + '.' + column : column;
 
-        if (entityName && (excludeColumns.indexOf(entityName) > -1 || excludeColumns.indexOf(columnName) > -1)) {
+        if (entityName && excludeColumns.indexOf(entityName) > -1 || excludeColumns.indexOf(columnName) > -1) {
           continue;
         }
 

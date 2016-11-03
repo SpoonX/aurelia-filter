@@ -17,12 +17,10 @@ export declare class Filter extends CriteriaBuilder {
   showIdColumns: any;
   excludeColumns: any;
   filters: any;
+  fieldTypes: any;
   fieldElement: any;
   operatorElement: any;
   valueElement: any;
-  
-  // button group styling issue
-  constructor();
   attached(): any;
   parseCriteria(criteriaWhere?: any): any;
   buildFieldData(field?: any): any;
