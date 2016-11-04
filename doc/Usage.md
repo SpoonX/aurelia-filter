@@ -17,6 +17,10 @@
 ### columns
 An array with objects containing the `name` and `value`. If no `type` is given it will assume that the column is a `text`.
 
+When the given `type` is a `datetime`, `datetime-local` will be used instead because `datetime` is not supported by browsers.
+
+When the input value is invalid, for example with `datetime-local`, it will add the `has-error` class to the input. (styled default by bootstrap)
+
 Read me about [types](http://aurelia-form.spoonx.org/types.html).
 
 ### entity
