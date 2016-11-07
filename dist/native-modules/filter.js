@@ -94,7 +94,7 @@ export var Filter = (_dec = customElement('filter'), _dec2 = resolvedView('spoon
     this.fieldElement.options = this.columns;
 
     this.fieldElement.options.map(function (filter) {
-      _this2.fieldTypes[filter.name] = filter.type;
+      _this2.fieldTypes[filter.name] = filter.type === 'datetime' ? 'datetime-local' : filter.type;
     });
 
     if (this.criteria.where && Object.keys(this.criteria.where).length) {
@@ -207,7 +207,17 @@ export var Filter = (_dec = customElement('filter'), _dec2 = resolvedView('spoon
   };
 
   Filter.prototype.onChange = function onChange(blockIndex, index, isValue) {
-    if (typeof this.filters[blockIndex][index].data.value !== 'undefined') {
+    var filterValue = this.filters[blockIndex][index].data.value;
+
+    if (isValue && (filterValue === '' || filterValue === undefined)) {
+      this.filters[blockIndex][index].data.hasError = true;
+
+      return;
+    }
+
+    this.filters[blockIndex][index].data.hasError = false;
+
+    if (typeof filterValue !== 'undefined') {
       this.updateCriteria();
     }
 
@@ -230,7 +240,9 @@ export var Filter = (_dec = customElement('filter'), _dec2 = resolvedView('spoon
       var field = _ref;
 
       if (this.filters[blockIndex][index].data.field === field.value) {
-        this.filters[blockIndex][index].value.type = field.type || 'string';
+        var type = field.type === 'datetime' ? 'datetime-local' : field.type;
+
+        this.filters[blockIndex][index].value.type = type || 'string';
 
         break;
       }

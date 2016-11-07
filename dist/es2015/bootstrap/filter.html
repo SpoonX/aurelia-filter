@@ -21,11 +21,13 @@
 
         <div class="col-md-4">
           <div class="input-group">
-            <form-field
-                keydown.delegate="onChange($parent.$index, $index, true) & debounce:500"
-                value.bind="field.data.value"
-                element.bind="field.value">
-            </form-field>
+            <div class="${field.data.hasError ? 'has-error' : ''}">
+              <form-field
+                  keydown.delegate="onChange($parent.$index, $index, true) & debounce:500"
+                  value.bind="field.data.value"
+                  element.bind="field.value">
+              </form-field>
+            </div>
 
             <div class="input-group-btn">
               <button

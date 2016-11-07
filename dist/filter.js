@@ -59,7 +59,7 @@ export class Filter extends CriteriaBuilder {
 
     //eslint-disable-next-line array-callback-return
     this.fieldElement.options.map(filter => {
-      this.fieldTypes[filter.name] = filter.type;
+      this.fieldTypes[filter.name] = (filter.type === 'datetime') ? 'datetime-local' : filter.type;
     });
 
     // Do we need to set pre-defined values for the filter?
@@ -181,10 +181,21 @@ export class Filter extends CriteriaBuilder {
   }
 
   onChange(blockIndex, index, isValue) {
-    if (typeof this.filters[blockIndex][index].data.value !== 'undefined') {
+    let filterValue = this.filters[blockIndex][index].data.value;
+
+    if (isValue && (filterValue === '' || filterValue === undefined)) {
+      this.filters[blockIndex][index].data.hasError = true;
+
+      return;
+    }
+
+    this.filters[blockIndex][index].data.hasError = false;
+
+    if (typeof filterValue !== 'undefined') {
       this.updateCriteria();
     }
 
+    // prevent updating own `type`
     if (isValue) {
       return;
     }
@@ -192,7 +203,9 @@ export class Filter extends CriteriaBuilder {
     // change the input type of the `valueElement` based on the selected field
     for (let field of this.columns) {
       if (this.filters[blockIndex][index].data.field === field.value) {
-        this.filters[blockIndex][index].value.type = field.type || 'string';
+        let type = (field.type === 'datetime') ? 'datetime-local' : field.type;
+
+        this.filters[blockIndex][index].value.type = type || 'string';
 
         break;
       }
