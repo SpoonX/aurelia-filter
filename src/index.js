@@ -1,4 +1,5 @@
-import {Config} from 'aurelia-view-manager';
+import {Config}    from 'aurelia-view-manager';
+import {getLogger} from 'aurelia-logging';
 
 export function configure(aurelia) {
   aurelia.plugin('aurelia-form');
@@ -9,3 +10,9 @@ export function configure(aurelia) {
 
   aurelia.globalResources('./filter');
 }
+
+const logger = getLogger('aurelia-filter');
+
+export {
+  logger
+};

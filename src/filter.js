@@ -1,6 +1,7 @@
 import {customElement, bindable, bindingMode} from 'aurelia-framework';
 import {resolvedView}                         from 'aurelia-view-manager';
 import {CriteriaBuilder}                      from './criteriaBuilder';
+import {logger}                               from './index';
 
 @customElement('filter')
 @resolvedView('spoonx/filter', 'filter')
@@ -10,6 +11,7 @@ export class Filter extends CriteriaBuilder {
   @bindable entity                                             = null;
   @bindable showIdColumns                                      = true;
   @bindable excludeColumns;
+  @bindable includeColumns;
 
   filters      = [];
   fieldTypes   = [];
@@ -252,29 +254,60 @@ export class Filter extends CriteriaBuilder {
   }
 
   generateFields(columns, entityName) {
-    let excludeColumns = (this.excludeColumns) ? this.excludeColumns.replace(/\s/g, '').split(',') : [];
+    let paths = [];
+
+    let excludeColumns = splitOnColumnOrIdentity(this.excludeColumns);
+    let includeColumns = splitOnColumnOrIdentity(this.includeColumns);
+
+    if (excludeColumns && includeColumns) {
+      excludeColumns = [];
+
+      logger.warn(`both excludeColumns and includeColumns bindables are defined, ignoring excludeColumns`);
+    }
+
+    if (includeColumns) {
+      paths = includeColumns;
+    }
+
+    if (paths.length === 0) {
+      paths = Object.keys(columns);
+    }
+
+    if (excludeColumns.length !== 0) {
+      paths = paths.filter(path => {
+        return excludeColumns.indexOf(path) !== -1;
+      });
+    }
 
     if (this.showIdColumns) {
+      if (paths.indexOf('id') === -1) {
+        paths.push('id');
+      }
+
       columns.id = 'number';
     }
 
-    for (let column in columns) {
-      if (!columns.hasOwnProperty(column)) {
-        continue;
-      }
+    paths
+      .forEach(column => {
+        let columnName = (entityName) ? entityName + '.' + column : column;
 
-      let columnName = (entityName) ? entityName + '.' + column : column;
-
-      // ignore entire or part of a association OR specific field(s)
-      if ((entityName && excludeColumns.indexOf(entityName) > -1) || excludeColumns.indexOf(columnName) > -1) {
-        continue;
-      }
-
-      this.columns.push({
-        name : columnName,
-        value: columnName,
-        type : columns[column] || 'string'
+        this.columns.push({
+          name : columnName,
+          value: columnName,
+          type : columns[column] || 'string'
+        });
       });
-    }
   }
+}
+
+function splitOnColumnOrIdentity(value) {
+  if (Array.isArray(value)) {
+    return value;
+  }
+
+  if (typeof value === 'string') {
+    return value.split(',').map(str => str.trim());
+  }
+
+  return [];
 }
