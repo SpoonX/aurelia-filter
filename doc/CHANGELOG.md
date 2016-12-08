@@ -1,3 +1,13 @@
+<a name="1.1.1"></a>
+## [1.1.1](https://github.com/SpoonX/aurelia-filter/compare/v1.1.0...v1.1.1) (2016-12-08)
+
+
+### Bug Fixes
+
+* **criteria:** check on element value, not on (alias) name ([c169663](https://github.com/SpoonX/aurelia-filter/commit/c169663))
+
+
+
 <a name="1.1.0"></a>
 # [1.1.0](https://github.com/SpoonX/aurelia-filter/compare/v1.0.2...v1.1.0) (2016-11-07)
 

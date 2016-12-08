@@ -112,6 +112,7 @@ export let Filter = (_dec = customElement('filter'), _dec2 = resolvedView('spoon
 
     Object.keys(criteriaWhere).forEach((field, i) => {
       data = Object.assign(this.buildFieldData(criteriaWhere[field]), { field: field });
+
       if (i === 0) {
         return this.create(undefined, data);
       }
@@ -144,7 +145,7 @@ export let Filter = (_dec = customElement('filter'), _dec2 = resolvedView('spoon
 
   create(blockIndex, data) {
     if (data && data.field) {
-      let options = this.fieldElement.options.map(option => option.name);
+      let options = this.fieldElement.options.map(option => option.value);
 
       if (options.indexOf(data.field) < 0) {
         return;

@@ -130,6 +130,7 @@ export var Filter = (_dec = customElement('filter'), _dec2 = resolvedView('spoon
 
     Object.keys(criteriaWhere).forEach(function (field, i) {
       data = Object.assign(_this3.buildFieldData(criteriaWhere[field]), { field: field });
+
       if (i === 0) {
         return _this3.create(undefined, data);
       }
@@ -163,7 +164,7 @@ export var Filter = (_dec = customElement('filter'), _dec2 = resolvedView('spoon
   Filter.prototype.create = function create(blockIndex, data) {
     if (data && data.field) {
       var options = this.fieldElement.options.map(function (option) {
-        return option.name;
+        return option.value;
       });
 
       if (options.indexOf(data.field) < 0) {

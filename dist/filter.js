@@ -97,6 +97,7 @@ export class Filter extends CriteriaBuilder {
 
     Object.keys(criteriaWhere).forEach((field, i) => {
       data = Object.assign(this.buildFieldData(criteriaWhere[field]), {field: field});
+
       if (i === 0) {
         // create the first block
         return this.create(undefined, data);
@@ -133,7 +134,7 @@ export class Filter extends CriteriaBuilder {
   create(blockIndex, data) {
     // prevent adding a non-existing field to the filter (leads to selecting the wrong field in the dropdown)
     if (data && data.field) {
-      let options = this.fieldElement.options.map(option => option.name);
+      let options = this.fieldElement.options.map(option => option.value);
 
       if (options.indexOf(data.field) < 0) {
         return;
