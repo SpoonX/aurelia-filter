@@ -23,7 +23,7 @@
           <div class="input-group">
             <div class="${field.data.hasError ? 'has-error' : ''}">
               <form-field
-                  keydown.delegate="onChange($parent.$index, $index, true) & debounce:500"
+                  keydown.delegate="onChange($parent.$index, $index, true) & debounce:50"
                   value.bind="field.data.value"
                   element.bind="field.value">
               </form-field>

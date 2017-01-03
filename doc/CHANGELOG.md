@@ -1,3 +1,13 @@
+<a name="1.1.2"></a>
+## [1.1.2](https://github.com/SpoonX/aurelia-filter/compare/v1.1.1...v1.1.2) (2017-01-03)
+
+
+### Bug Fixes
+
+* **project:** decrease debounce on value input element ([833e422](https://github.com/SpoonX/aurelia-filter/commit/833e422))
+
+
+
 <a name="1.1.1"></a>
 ## [1.1.1](https://github.com/SpoonX/aurelia-filter/compare/v1.1.0...v1.1.1) (2016-12-08)
 

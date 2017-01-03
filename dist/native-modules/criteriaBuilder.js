@@ -1,8 +1,17 @@
+'use strict';
+
+exports.__esModule = true;
+exports.CriteriaBuilder = undefined;
+
+var _extend = require('extend');
+
+var _extend2 = _interopRequireDefault(_extend);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 
-import extend from 'extend';
 
-export var CriteriaBuilder = function () {
+var CriteriaBuilder = exports.CriteriaBuilder = function () {
   function CriteriaBuilder() {
     
   }
@@ -22,7 +31,7 @@ export var CriteriaBuilder = function () {
           return;
         }
 
-        filtersParsed = extend(filtersParsed, _this.parseField(filter.data.field, _this.parseOperator(filter.data)));
+        filtersParsed = (0, _extend2.default)(filtersParsed, _this.parseField(filter.data.field, _this.parseOperator(filter.data)));
       });
 
       blocks.push(filtersParsed);

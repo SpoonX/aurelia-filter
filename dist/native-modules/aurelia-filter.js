@@ -1,11 +1,16 @@
-import { Config } from 'aurelia-view-manager';
+'use strict';
 
-import { CriteriaBuilder } from './criteriaBuilder';
+exports.__esModule = true;
+exports.configure = configure;
 
-export function configure(aurelia) {
+var _aureliaViewManager = require('aurelia-view-manager');
+
+var _criteriaBuilder = require('./criteriaBuilder');
+
+function configure(aurelia) {
   aurelia.plugin('aurelia-form');
 
-  aurelia.container.get(Config).configureNamespace('spoonx/filter', {
+  aurelia.container.get(_aureliaViewManager.Config).configureNamespace('spoonx/filter', {
     location: './{{framework}}/{{view}}.html'
   });
 
