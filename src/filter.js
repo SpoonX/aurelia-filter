@@ -11,8 +11,9 @@ export class Filter extends CriteriaBuilder {
   @bindable showIdColumns                                      = true;
   @bindable excludeColumns;
 
-  filters      = [];
-  fieldTypes   = [];
+  filters           = [];
+  fieldTypes        = [];
+  fieldEnumerations = {};
 
   fieldElement = {
     key    : 'field',
@@ -59,7 +60,11 @@ export class Filter extends CriteriaBuilder {
 
     //eslint-disable-next-line array-callback-return
     this.fieldElement.options.map(filter => {
-      this.fieldTypes[filter.name] = (filter.type === 'datetime') ? 'datetime-local' : filter.type;
+      this.fieldTypes[filter.value] = (filter.type === 'datetime') ? 'datetime-local' : filter.type;
+
+      if (filter.type === 'select') {
+        this.fieldEnumerations[filter.value] = filter.options || [];
+      }
     });
 
     // Do we need to set pre-defined values for the filter?
@@ -143,9 +148,13 @@ export class Filter extends CriteriaBuilder {
 
     // determine the `type` of the field
     let valueElement  = Object.create(this.valueElement);
-    let fieldName     = data ? data.field : this.columns[0].name;
+    let fieldName     = data ? data.field : this.columns[0].value;
 
     valueElement.type = this.fieldTypes[fieldName] || 'string';
+
+    if (valueElement.type === 'select') {
+      valueElement.options = this.fieldEnumerations[fieldName];
+    }
 
     let filter = {
       field   : this.fieldElement,
@@ -208,8 +217,17 @@ export class Filter extends CriteriaBuilder {
 
         this.filters[blockIndex][index].value.type = type || 'string';
 
+        if (type === 'select') {
+          this.filters[blockIndex][index].value.options = field.options;
+
+          this.filters[blockIndex][index].data.value = field.options.length ? field.options[0].value : undefined;
+        }
+
         break;
       }
+    }
+    if (typeof filterValue !== 'undefined') {
+      this.updateCriteria();
     }
   }
 
@@ -222,7 +240,7 @@ export class Filter extends CriteriaBuilder {
       columns = this.entity.asObject();
     }
 
-    this.generateFields(columns);
+    this.generateFields(columns, null, metaData);
 
     if (Object.keys(metaData.associations).length < 1) {
       return;
@@ -252,7 +270,7 @@ export class Filter extends CriteriaBuilder {
     }
   }
 
-  generateFields(columns, entityName) {
+  generateFields(columns, entityName, metaData) {
     let excludeColumns = (this.excludeColumns) ? this.excludeColumns.replace(/\s/g, '').split(',') : [];
 
     if (this.showIdColumns) {
@@ -271,11 +289,18 @@ export class Filter extends CriteriaBuilder {
         continue;
       }
 
-      this.columns.push({
+      let filterColumn = {
         name : columnName,
         value: columnName,
         type : columns[column] || 'string'
-      });
+      };
+
+      if (metaData.enumerations && column in metaData.enumerations) {
+        filterColumn.type    = 'select';
+        filterColumn.options = metaData.enumerations[column];
+      }
+
+      this.columns.push(filterColumn);
     }
   }
 }
