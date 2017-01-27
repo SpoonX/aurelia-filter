@@ -18,6 +18,7 @@ export declare class Filter extends CriteriaBuilder {
   excludeColumns: any;
   filters: any;
   fieldTypes: any;
+  fieldEnumerations: any;
   fieldElement: any;
   operatorElement: any;
   valueElement: any;
@@ -28,5 +29,5 @@ export declare class Filter extends CriteriaBuilder {
   destroy(blockIndex?: any, index?: any): any;
   onChange(blockIndex?: any, index?: any, isValue?: any): any;
   getEntityFields(): any;
-  generateFields(columns?: any, entityName?: any): any;
+  generateFields(columns?: any, entityName?: any, metaData?: any): any;
 }

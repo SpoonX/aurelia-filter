@@ -51,7 +51,7 @@ export let Filter = (_dec = customElement('filter'), _dec2 = resolvedView('spoon
   constructor(...args) {
     var _temp;
 
-    return _temp = super(...args), _initDefineProp(this, 'criteria', _descriptor, this), _initDefineProp(this, 'columns', _descriptor2, this), _initDefineProp(this, 'entity', _descriptor3, this), _initDefineProp(this, 'showIdColumns', _descriptor4, this), _initDefineProp(this, 'excludeColumns', _descriptor5, this), this.filters = [], this.fieldTypes = [], this.fieldElement = {
+    return _temp = super(...args), _initDefineProp(this, 'criteria', _descriptor, this), _initDefineProp(this, 'columns', _descriptor2, this), _initDefineProp(this, 'entity', _descriptor3, this), _initDefineProp(this, 'showIdColumns', _descriptor4, this), _initDefineProp(this, 'excludeColumns', _descriptor5, this), this.filters = [], this.fieldTypes = [], this.fieldEnumerations = {}, this.fieldElement = {
       key: 'field',
       type: 'select',
       label: false,
@@ -78,7 +78,11 @@ export let Filter = (_dec = customElement('filter'), _dec2 = resolvedView('spoon
     this.fieldElement.options = this.columns;
 
     this.fieldElement.options.map(filter => {
-      this.fieldTypes[filter.name] = filter.type === 'datetime' ? 'datetime-local' : filter.type;
+      this.fieldTypes[filter.value] = filter.type === 'datetime' ? 'datetime-local' : filter.type;
+
+      if (filter.type === 'select') {
+        this.fieldEnumerations[filter.value] = filter.options || [];
+      }
     });
 
     if (this.criteria.where && Object.keys(this.criteria.where).length) {
@@ -153,9 +157,13 @@ export let Filter = (_dec = customElement('filter'), _dec2 = resolvedView('spoon
     }
 
     let valueElement = Object.create(this.valueElement);
-    let fieldName = data ? data.field : this.columns[0].name;
+    let fieldName = data ? data.field : this.columns[0].value;
 
     valueElement.type = this.fieldTypes[fieldName] || 'string';
+
+    if (valueElement.type === 'select') {
+      valueElement.options = this.fieldEnumerations[fieldName];
+    }
 
     let filter = {
       field: this.fieldElement,
@@ -212,8 +220,17 @@ export let Filter = (_dec = customElement('filter'), _dec2 = resolvedView('spoon
 
         this.filters[blockIndex][index].value.type = type || 'string';
 
+        if (type === 'select') {
+          this.filters[blockIndex][index].value.options = field.options;
+
+          this.filters[blockIndex][index].data.value = field.options.length ? field.options[0].value : undefined;
+        }
+
         break;
       }
+    }
+    if (typeof filterValue !== 'undefined') {
+      this.updateCriteria();
     }
   }
 
@@ -225,7 +242,7 @@ export let Filter = (_dec = customElement('filter'), _dec2 = resolvedView('spoon
       columns = this.entity.asObject();
     }
 
-    this.generateFields(columns);
+    this.generateFields(columns, null, metaData);
 
     if (Object.keys(metaData.associations).length < 1) {
       return;
@@ -254,7 +271,7 @@ export let Filter = (_dec = customElement('filter'), _dec2 = resolvedView('spoon
     }
   }
 
-  generateFields(columns, entityName) {
+  generateFields(columns, entityName, metaData) {
     let excludeColumns = this.excludeColumns ? this.excludeColumns.replace(/\s/g, '').split(',') : [];
 
     if (this.showIdColumns) {
@@ -272,11 +289,18 @@ export let Filter = (_dec = customElement('filter'), _dec2 = resolvedView('spoon
         continue;
       }
 
-      this.columns.push({
+      let filterColumn = {
         name: columnName,
         value: columnName,
         type: columns[column] || 'string'
-      });
+      };
+
+      if (metaData.enumerations && column in metaData.enumerations) {
+        filterColumn.type = 'select';
+        filterColumn.options = metaData.enumerations[column];
+      }
+
+      this.columns.push(filterColumn);
     }
   }
 }, (_descriptor = _applyDecoratedDescriptor(_class2.prototype, 'criteria', [_dec3], {

@@ -1,3 +1,13 @@
+<a name="1.2.0"></a>
+# [1.2.0](https://github.com/SpoonX/aurelia-filter/compare/v1.1.2...v1.2.0) (2017-01-27)
+
+
+### Features
+
+* **project:** add support for enumerations ([5f8766b](https://github.com/SpoonX/aurelia-filter/commit/5f8766b))
+
+
+
 <a name="1.1.2"></a>
 ## [1.1.2](https://github.com/SpoonX/aurelia-filter/compare/v1.1.1...v1.1.2) (2017-01-03)
 

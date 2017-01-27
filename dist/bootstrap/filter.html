@@ -23,9 +23,16 @@
           <div class="input-group">
             <div class="${field.data.hasError ? 'has-error' : ''}">
               <form-field
-                  keydown.delegate="onChange($parent.$index, $index, true) & debounce:50"
+                  if.bind="field.value.type !== 'select'"
+                  keypress.delegate="onChange($parent.$index, $index, true) & debounce:50"
                   value.bind="field.data.value"
                   element.bind="field.value">
+              </form-field>
+              <form-field
+                change.delegate="onChange($parent.$index, $index, true) & debounce:50"
+                if.bind="field.value.type === 'select'"
+                value.bind="field.data.value"
+                element.bind="field.value">
               </form-field>
             </div>
 
@@ -58,9 +65,16 @@
 
         <div class="col-md-4" style="margin-bottom: 15px;">
           <form-field
+              if.bind="field.value.type !== 'select'"
               keypress.delegate="onChange($parent.$index, $index, true) & debounce:500"
               value.bind="field.data.between"
               element.bind="field.value">
+          </form-field>
+          <form-field
+            change.delegate="onChange($parent.$index, $index, true) & debounce:500"
+            if.bind="field.value.type === 'select'"
+            value.bind="field.data.between"
+            element.bind="field.value">
           </form-field>
         </div>
       </div>

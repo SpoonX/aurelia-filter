@@ -74,7 +74,7 @@ var Filter = exports.Filter = (_dec = (0, _aureliaFramework.customElement)('filt
       args[_key] = arguments[_key];
     }
 
-    return _ret = (_temp = (_this = _possibleConstructorReturn(this, _CriteriaBuilder.call.apply(_CriteriaBuilder, [this].concat(args))), _this), _initDefineProp(_this, 'criteria', _descriptor, _this), _initDefineProp(_this, 'columns', _descriptor2, _this), _initDefineProp(_this, 'entity', _descriptor3, _this), _initDefineProp(_this, 'showIdColumns', _descriptor4, _this), _initDefineProp(_this, 'excludeColumns', _descriptor5, _this), _this.filters = [], _this.fieldTypes = [], _this.fieldElement = {
+    return _ret = (_temp = (_this = _possibleConstructorReturn(this, _CriteriaBuilder.call.apply(_CriteriaBuilder, [this].concat(args))), _this), _initDefineProp(_this, 'criteria', _descriptor, _this), _initDefineProp(_this, 'columns', _descriptor2, _this), _initDefineProp(_this, 'entity', _descriptor3, _this), _initDefineProp(_this, 'showIdColumns', _descriptor4, _this), _initDefineProp(_this, 'excludeColumns', _descriptor5, _this), _this.filters = [], _this.fieldTypes = [], _this.fieldEnumerations = {}, _this.fieldElement = {
       key: 'field',
       type: 'select',
       label: false,
@@ -103,7 +103,11 @@ var Filter = exports.Filter = (_dec = (0, _aureliaFramework.customElement)('filt
     this.fieldElement.options = this.columns;
 
     this.fieldElement.options.map(function (filter) {
-      _this2.fieldTypes[filter.name] = filter.type === 'datetime' ? 'datetime-local' : filter.type;
+      _this2.fieldTypes[filter.value] = filter.type === 'datetime' ? 'datetime-local' : filter.type;
+
+      if (filter.type === 'select') {
+        _this2.fieldEnumerations[filter.value] = filter.options || [];
+      }
     });
 
     if (this.criteria.where && Object.keys(this.criteria.where).length) {
@@ -182,9 +186,13 @@ var Filter = exports.Filter = (_dec = (0, _aureliaFramework.customElement)('filt
     }
 
     var valueElement = Object.create(this.valueElement);
-    var fieldName = data ? data.field : this.columns[0].name;
+    var fieldName = data ? data.field : this.columns[0].value;
 
     valueElement.type = this.fieldTypes[fieldName] || 'string';
+
+    if (valueElement.type === 'select') {
+      valueElement.options = this.fieldEnumerations[fieldName];
+    }
 
     var filter = {
       field: this.fieldElement,
@@ -254,8 +262,17 @@ var Filter = exports.Filter = (_dec = (0, _aureliaFramework.customElement)('filt
 
         this.filters[blockIndex][index].value.type = type || 'string';
 
+        if (type === 'select') {
+          this.filters[blockIndex][index].value.options = field.options;
+
+          this.filters[blockIndex][index].data.value = field.options.length ? field.options[0].value : undefined;
+        }
+
         break;
       }
+    }
+    if (typeof filterValue !== 'undefined') {
+      this.updateCriteria();
     }
   };
 
@@ -267,7 +284,7 @@ var Filter = exports.Filter = (_dec = (0, _aureliaFramework.customElement)('filt
       columns = this.entity.asObject();
     }
 
-    this.generateFields(columns);
+    this.generateFields(columns, null, metaData);
 
     if (Object.keys(metaData.associations).length < 1) {
       return;
@@ -296,7 +313,7 @@ var Filter = exports.Filter = (_dec = (0, _aureliaFramework.customElement)('filt
     }
   };
 
-  Filter.prototype.generateFields = function generateFields(columns, entityName) {
+  Filter.prototype.generateFields = function generateFields(columns, entityName, metaData) {
     var excludeColumns = this.excludeColumns ? this.excludeColumns.replace(/\s/g, '').split(',') : [];
 
     if (this.showIdColumns) {
@@ -314,11 +331,18 @@ var Filter = exports.Filter = (_dec = (0, _aureliaFramework.customElement)('filt
         continue;
       }
 
-      this.columns.push({
+      var filterColumn = {
         name: columnName,
         value: columnName,
         type: columns[column] || 'string'
-      });
+      };
+
+      if (metaData.enumerations && column in metaData.enumerations) {
+        filterColumn.type = 'select';
+        filterColumn.options = metaData.enumerations[column];
+      }
+
+      this.columns.push(filterColumn);
     }
   };
 
