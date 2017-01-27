@@ -34,7 +34,9 @@ Here's a snippet to give you an idea of what this module supports.
 @bindable columns = [
   {name : "id",         value: "id",        type: 'number'},
   {name : "Name",       value: "name",      type: 'text'},
-  {name : "Created at", value: "createdAt", type: 'date'}
+  {name : "Created at", value: "createdAt", type: 'date'},
+  // For enumeration
+  {name : "State", value: "state", type: 'select'}
 ];
 ```
 

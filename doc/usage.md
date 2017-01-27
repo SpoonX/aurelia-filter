@@ -4,7 +4,9 @@
 @bindable columns = [
   {name : "id",         value: "id",        type: 'number'},
   {name : "Name",       value: "name",      type: 'text'},
-  {name : "Created at", value: "createdAt", type: 'date'}
+  {name : "Created at", value: "createdAt", type: 'date'},
+  // For enumeration
+  {name : "State", value: "state", type: 'select'}
 ];
 ```
 
@@ -18,6 +20,8 @@
 An array with objects containing the `name` and `value`. If no `type` is given it will assume that the column is a `text`.
 
 When the given `type` is a `datetime`, `datetime-local` will be used instead because `datetime` is not supported by browsers.
+
+When the given `type` is a `select`, we assume the given column is an enumeration. Thus we will generate the options for the select element based on the enum values of the entity.
 
 When the input value is invalid, for example with `datetime-local`, it will add the `has-error` class to the input. (styled default by bootstrap)
 
