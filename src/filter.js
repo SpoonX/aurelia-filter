@@ -240,7 +240,7 @@ export class Filter extends CriteriaBuilder {
       columns = this.entity.asObject();
     }
 
-    this.generateFields(columns, null, metaData);
+    this.generateFields(columns, {metaData});
 
     if (Object.keys(metaData.associations).length < 1) {
       return;
@@ -266,11 +266,11 @@ export class Filter extends CriteriaBuilder {
         continue;
       }
 
-      this.generateFields(repoData, entityName);
+      this.generateFields(repoData, {entityName});
     }
   }
 
-  generateFields(columns, entityName, metaData) {
+  generateFields(columns, {entityName, metaData} = {}) {
     let excludeColumns = (this.excludeColumns) ? this.excludeColumns.replace(/\s/g, '').split(',') : [];
 
     if (this.showIdColumns) {

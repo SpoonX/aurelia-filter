@@ -5,17 +5,17 @@
       <div class="col-md-12">
         <div class="col-md-4">
           <form-field
-              change.delegate="onChange($parent.$index, $index) & debounce:200"
-              value.bind="field.data.field"
-              element.bind="field.field">
+            change.delegate="onChange($parent.$index, $index) & debounce:200"
+            value.bind="field.data.field"
+            element.bind="field.field">
           </form-field>
         </div>
 
         <div class="col-md-4">
           <form-field
-              change.delegate="onChange($parent.$index, $index) & debounce:200"
-              value.bind="field.data.operator"
-              element.bind="field.operator">
+            change.delegate="onChange($parent.$index, $index) & debounce:200"
+            value.bind="field.data.operator"
+            element.bind="field.operator">
           </form-field>
         </div>
 
@@ -23,10 +23,10 @@
           <div class="input-group">
             <div class="${field.data.hasError ? 'has-error' : ''}">
               <form-field
-                  if.bind="field.value.type !== 'select'"
-                  keypress.delegate="onChange($parent.$index, $index, true) & debounce:50"
-                  value.bind="field.data.value"
-                  element.bind="field.value">
+                if.bind="field.value.type !== 'select'"
+                keypress.delegate="onChange($parent.$index, $index, true) & debounce:50"
+                value.bind="field.data.value"
+                element.bind="field.value">
               </form-field>
               <form-field
                 change.delegate="onChange($parent.$index, $index, true) & debounce:50"
@@ -38,16 +38,16 @@
 
             <div class="input-group-btn">
               <button
-                  class="btn btn-primary add-filter "
-                  if.bind="$last"
-                  click.delegate="create($parent.$index)"
-                  t="${$first ? '+ And' : '+'}">+
+                class="btn btn-primary add-filter "
+                if.bind="$last"
+                click.delegate="create($parent.$index)"
+                t="${$first ? '+ And' : '+'}">+
               </button>
               <button
-                  class="btn btn-danger remove-filter"
-                  if.bind="filter.length > 1"
-                  click.delegate="destroy($parent.$index, $index)"
-                  t="${$first ? '- And' : '-'}">-
+                class="btn btn-danger remove-filter"
+                if.bind="filter.length > 1"
+                click.delegate="destroy($parent.$index, $index)"
+                t="${$first ? '- And' : '-'}">-
               </button>
             </div>
           </div>
@@ -65,10 +65,10 @@
 
         <div class="col-md-4" style="margin-bottom: 15px;">
           <form-field
-              if.bind="field.value.type !== 'select'"
-              keypress.delegate="onChange($parent.$index, $index, true) & debounce:500"
-              value.bind="field.data.between"
-              element.bind="field.value">
+            if.bind="field.value.type !== 'select'"
+            keypress.delegate="onChange($parent.$index, $index, true) & debounce:500"
+            value.bind="field.data.between"
+            element.bind="field.value">
           </form-field>
           <form-field
             change.delegate="onChange($parent.$index, $index, true) & debounce:500"
@@ -84,16 +84,16 @@
       <div class="col-md-offset-4 col-md-4">
         <div class="btn-group btn-group btn-group-justified">
           <a
-              class="btn btn-primary add-block btn-sm"
-              if.bind="$last"
-              click.delegate="create()"
-              t="+ Or">+
+            class="btn btn-primary add-block btn-sm"
+            if.bind="$last"
+            click.delegate="create()"
+            t="+ Or">+
           </a>
           <a
-              class="btn btn-danger remove-block btn-sm"
-              if.bind="filters.length > 1"
-              click.delegate="destroy($index)"
-              t="- Or">-;
+            class="btn btn-danger remove-block btn-sm"
+            if.bind="filters.length > 1"
+            click.delegate="destroy($index)"
+            t="- Or">-;
           </a>
         </div>
       </div>
