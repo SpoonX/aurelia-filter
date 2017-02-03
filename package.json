@@ -1,6 +1,6 @@
 {
   "name": "aurelia-filter",
-  "version": "1.2.0",
+  "version": "2.0.0",
   "description": "A plugin for aurelia to populate search/filter criteria. Works well with aurelia-orm.",
   "keywords": [
     "aurelia",

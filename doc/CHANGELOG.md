@@ -1,3 +1,23 @@
+<a name="2.0.0"></a>
+# [2.0.0](https://github.com/SpoonX/aurelia-filter/compare/v1.2.0...v2.0.0) (2017-02-03)
+
+
+### Bug Fixes
+
+* **project:** make sure criteria matches the selected enum value ([6b2a706](https://github.com/SpoonX/aurelia-filter/commit/6b2a706))
+* **project:** use an object as parameter for generateFields ([33be165](https://github.com/SpoonX/aurelia-filter/commit/33be165))
+
+
+### BREAKING CHANGES
+
+* project: An optional boolean parameter has been added to the
+“create” method. This parameter should be set to “true” if you want to
+update the criteria object as soon as the new filter block has been
+created with a “select” type.
+* project: it’s now expecting an object as second parameter for the function generateFields.
+
+
+
 <a name="1.2.0"></a>
 # [1.2.0](https://github.com/SpoonX/aurelia-filter/compare/v1.1.2...v1.2.0) (2017-01-27)
 

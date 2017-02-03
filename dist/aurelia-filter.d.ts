@@ -25,9 +25,15 @@ export declare class Filter extends CriteriaBuilder {
   attached(): any;
   parseCriteria(criteriaWhere?: any): any;
   buildFieldData(field?: any): any;
-  create(blockIndex?: any, data?: any): any;
+  create(blockIndex?: any, data?: any, skipOnChange?: any): any;
   destroy(blockIndex?: any, index?: any): any;
   onChange(blockIndex?: any, index?: any, isValue?: any): any;
   getEntityFields(): any;
-  generateFields(columns?: any, entityName?: any, metaData?: any): any;
+  generateFields(columns?: any, {
+    entityName,
+    metaData
+  }?: {
+    entityName?: any,
+    metaData?: any
+  }): any;
 }

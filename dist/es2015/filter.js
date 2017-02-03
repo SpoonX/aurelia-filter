@@ -104,10 +104,10 @@ export let Filter = (_dec = customElement('filter'), _dec2 = resolvedView('spoon
         Object.keys(block).forEach(field => {
           data = Object.assign(this.buildFieldData(block[field]), { field: field });
           if (!this.filters[i]) {
-            return this.create(undefined, data);
+            return this.create(undefined, data, true);
           }
 
-          this.create(i, data);
+          this.create(i, data, true);
         });
       });
 
@@ -118,10 +118,10 @@ export let Filter = (_dec = customElement('filter'), _dec2 = resolvedView('spoon
       data = Object.assign(this.buildFieldData(criteriaWhere[field]), { field: field });
 
       if (i === 0) {
-        return this.create(undefined, data);
+        return this.create(undefined, data, true);
       }
 
-      this.create(0, data);
+      this.create(0, data, true);
     });
   }
 
@@ -147,7 +147,7 @@ export let Filter = (_dec = customElement('filter'), _dec2 = resolvedView('spoon
     return { operator: key, value: field[key] };
   }
 
-  create(blockIndex, data) {
+  create(blockIndex, data, skipOnChange) {
     if (data && data.field) {
       let options = this.fieldElement.options.map(option => option.value);
 
@@ -162,6 +162,14 @@ export let Filter = (_dec = customElement('filter'), _dec2 = resolvedView('spoon
     valueElement.type = this.fieldTypes[fieldName] || 'string';
 
     if (valueElement.type === 'select') {
+      if (!skipOnChange) {
+        data = {
+          field: fieldName,
+          value: this.fieldEnumerations[fieldName][0],
+          operator: this.operatorElement.options[0].value
+        };
+      }
+
       valueElement.options = this.fieldEnumerations[fieldName];
     }
 
@@ -173,10 +181,19 @@ export let Filter = (_dec = customElement('filter'), _dec2 = resolvedView('spoon
     };
 
     if (typeof blockIndex !== 'undefined') {
-      return this.filters[blockIndex].push(filter);
+      this.filters[blockIndex].push(filter);
+      if (!skipOnChange && valueElement.type === 'select') {
+        this.onChange(blockIndex, this.filters[blockIndex].length - 1, true);
+      }
+
+      return;
     }
 
     this.filters.push([filter]);
+
+    if (!skipOnChange && valueElement.type === 'select') {
+      this.onChange(this.filters.length - 1, 0, true);
+    }
   }
 
   destroy(blockIndex, index) {
@@ -242,7 +259,7 @@ export let Filter = (_dec = customElement('filter'), _dec2 = resolvedView('spoon
       columns = this.entity.asObject();
     }
 
-    this.generateFields(columns, null, metaData);
+    this.generateFields(columns, { metaData });
 
     if (Object.keys(metaData.associations).length < 1) {
       return;
@@ -267,11 +284,11 @@ export let Filter = (_dec = customElement('filter'), _dec2 = resolvedView('spoon
         continue;
       }
 
-      this.generateFields(repoData, entityName);
+      this.generateFields(repoData, { entityName });
     }
   }
 
-  generateFields(columns, entityName, metaData) {
+  generateFields(columns, { entityName, metaData } = {}) {
     let excludeColumns = this.excludeColumns ? this.excludeColumns.replace(/\s/g, '').split(',') : [];
 
     if (this.showIdColumns) {

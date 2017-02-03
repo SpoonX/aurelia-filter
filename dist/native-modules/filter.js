@@ -129,10 +129,10 @@ var Filter = exports.Filter = (_dec = (0, _aureliaFramework.customElement)('filt
         Object.keys(block).forEach(function (field) {
           data = Object.assign(_this3.buildFieldData(block[field]), { field: field });
           if (!_this3.filters[i]) {
-            return _this3.create(undefined, data);
+            return _this3.create(undefined, data, true);
           }
 
-          _this3.create(i, data);
+          _this3.create(i, data, true);
         });
       });
 
@@ -143,10 +143,10 @@ var Filter = exports.Filter = (_dec = (0, _aureliaFramework.customElement)('filt
       data = Object.assign(_this3.buildFieldData(criteriaWhere[field]), { field: field });
 
       if (i === 0) {
-        return _this3.create(undefined, data);
+        return _this3.create(undefined, data, true);
       }
 
-      _this3.create(0, data);
+      _this3.create(0, data, true);
     });
   };
 
@@ -172,7 +172,7 @@ var Filter = exports.Filter = (_dec = (0, _aureliaFramework.customElement)('filt
     return { operator: key, value: field[key] };
   };
 
-  Filter.prototype.create = function create(blockIndex, data) {
+  Filter.prototype.create = function create(blockIndex, data, skipOnChange) {
     if (data && data.field) {
       var options = this.fieldElement.options.map(function (option) {
         return option.value;
@@ -189,6 +189,14 @@ var Filter = exports.Filter = (_dec = (0, _aureliaFramework.customElement)('filt
     valueElement.type = this.fieldTypes[fieldName] || 'string';
 
     if (valueElement.type === 'select') {
+      if (!skipOnChange) {
+        data = {
+          field: fieldName,
+          value: this.fieldEnumerations[fieldName][0],
+          operator: this.operatorElement.options[0].value
+        };
+      }
+
       valueElement.options = this.fieldEnumerations[fieldName];
     }
 
@@ -200,10 +208,19 @@ var Filter = exports.Filter = (_dec = (0, _aureliaFramework.customElement)('filt
     };
 
     if (typeof blockIndex !== 'undefined') {
-      return this.filters[blockIndex].push(filter);
+      this.filters[blockIndex].push(filter);
+      if (!skipOnChange && valueElement.type === 'select') {
+        this.onChange(blockIndex, this.filters[blockIndex].length - 1, true);
+      }
+
+      return;
     }
 
     this.filters.push([filter]);
+
+    if (!skipOnChange && valueElement.type === 'select') {
+      this.onChange(this.filters.length - 1, 0, true);
+    }
   };
 
   Filter.prototype.destroy = function destroy(blockIndex, index) {
@@ -282,7 +299,7 @@ var Filter = exports.Filter = (_dec = (0, _aureliaFramework.customElement)('filt
       columns = this.entity.asObject();
     }
 
-    this.generateFields(columns, null, metaData);
+    this.generateFields(columns, { metaData: metaData });
 
     if (Object.keys(metaData.associations).length < 1) {
       return;
@@ -307,11 +324,15 @@ var Filter = exports.Filter = (_dec = (0, _aureliaFramework.customElement)('filt
         continue;
       }
 
-      this.generateFields(repoData, entityName);
+      this.generateFields(repoData, { entityName: entityName });
     }
   };
 
-  Filter.prototype.generateFields = function generateFields(columns, entityName, metaData) {
+  Filter.prototype.generateFields = function generateFields(columns) {
+    var _ref2 = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {},
+        entityName = _ref2.entityName,
+        metaData = _ref2.metaData;
+
     var excludeColumns = this.excludeColumns ? this.excludeColumns.replace(/\s/g, '').split(',') : [];
 
     if (this.showIdColumns) {

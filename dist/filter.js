@@ -89,11 +89,11 @@ export class Filter extends CriteriaBuilder {
           data = Object.assign(this.buildFieldData(block[field]), {field: field});
           if (!this.filters[i]) {
             // create a new block
-            return this.create(undefined, data);
+            return this.create(undefined, data, true);
           }
 
           // Add AND condition to the current block
-          this.create(i, data);
+          this.create(i, data, true);
         });
       });
 
@@ -105,11 +105,11 @@ export class Filter extends CriteriaBuilder {
 
       if (i === 0) {
         // create the first block
-        return this.create(undefined, data);
+        return this.create(undefined, data, true);
       }
 
       // Add AND condition to the first block
-      this.create(0, data);
+      this.create(0, data, true);
     });
   }
 
@@ -136,7 +136,7 @@ export class Filter extends CriteriaBuilder {
     return {operator: key, value: field[key]};
   }
 
-  create(blockIndex, data) {
+  create(blockIndex, data, skipOnChange) {
     // prevent adding a non-existing field to the filter (leads to selecting the wrong field in the dropdown)
     if (data && data.field) {
       let options = this.fieldElement.options.map(option => option.value);
@@ -153,6 +153,14 @@ export class Filter extends CriteriaBuilder {
     valueElement.type = this.fieldTypes[fieldName] || 'string';
 
     if (valueElement.type === 'select') {
+      if (!skipOnChange) {
+        data = {
+          field   : fieldName,
+          value   : this.fieldEnumerations[fieldName][0],
+          operator: this.operatorElement.options[0].value
+        };
+      }
+
       valueElement.options = this.fieldEnumerations[fieldName];
     }
 
@@ -165,11 +173,20 @@ export class Filter extends CriteriaBuilder {
 
     // create filter
     if (typeof blockIndex !== 'undefined') {
-      return this.filters[blockIndex].push(filter);
+      this.filters[blockIndex].push(filter);
+      if (!skipOnChange && valueElement.type === 'select') {
+        this.onChange(blockIndex, this.filters[blockIndex].length -1, true);
+      }
+
+      return;
     }
 
     // create block
     this.filters.push([filter]);
+
+    if (!skipOnChange && valueElement.type === 'select') {
+      this.onChange(this.filters.length -1, 0, true);
+    }
   }
 
   destroy(blockIndex, index) {
@@ -240,7 +257,7 @@ export class Filter extends CriteriaBuilder {
       columns = this.entity.asObject();
     }
 
-    this.generateFields(columns, null, metaData);
+    this.generateFields(columns, {metaData});
 
     if (Object.keys(metaData.associations).length < 1) {
       return;
@@ -266,11 +283,11 @@ export class Filter extends CriteriaBuilder {
         continue;
       }
 
-      this.generateFields(repoData, entityName);
+      this.generateFields(repoData, {entityName});
     }
   }
 
-  generateFields(columns, entityName, metaData) {
+  generateFields(columns, {entityName, metaData} = {}) {
     let excludeColumns = (this.excludeColumns) ? this.excludeColumns.replace(/\s/g, '').split(',') : [];
 
     if (this.showIdColumns) {
