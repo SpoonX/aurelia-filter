@@ -24,7 +24,7 @@
             <div class="${field.data.hasError ? 'has-error' : ''}">
               <form-field
                 if.bind="field.value.type !== 'select'"
-                keypress.delegate="onChange($parent.$index, $index, true) & debounce:50"
+                keyup.delegate="onChange($parent.$index, $index, true) & debounce:50"
                 value.bind="field.data.value"
                 element.bind="field.value">
               </form-field>
@@ -38,7 +38,7 @@
 
             <div class="input-group-btn">
               <button
-                class="btn btn-primary add-filter "
+                class="btn btn-primary add-filter"
                 if.bind="$last"
                 click.delegate="create($parent.$index)"
                 t="${$first ? '+ And' : '+'}">+
@@ -66,12 +66,12 @@
         <div class="col-md-4" style="margin-bottom: 15px;">
           <form-field
             if.bind="field.value.type !== 'select'"
-            keypress.delegate="onChange($parent.$index, $index, true) & debounce:500"
+            keyup.delegate="onChange($parent.$index, $index, true) & debounce:50"
             value.bind="field.data.between"
             element.bind="field.value">
           </form-field>
           <form-field
-            change.delegate="onChange($parent.$index, $index, true) & debounce:500"
+            change.delegate="onChange($parent.$index, $index, true) & debounce:50"
             if.bind="field.value.type === 'select'"
             value.bind="field.data.between"
             element.bind="field.value">

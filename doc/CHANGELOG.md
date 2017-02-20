@@ -1,3 +1,13 @@
+<a name="2.0.1"></a>
+## [2.0.1](https://github.com/SpoonX/aurelia-filter/compare/v2.0.0...v2.0.1) (2017-02-20)
+
+
+### Bug Fixes
+
+* **filter:** fix issue with registering value changes ([e1dcc7d](https://github.com/SpoonX/aurelia-filter/commit/e1dcc7d))
+
+
+
 <a name="2.0.0"></a>
 # [2.0.0](https://github.com/SpoonX/aurelia-filter/compare/v1.2.0...v2.0.0) (2017-02-03)
 
