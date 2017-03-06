@@ -27,11 +27,11 @@ export class Filter extends CriteriaBuilder {
     type   : 'select',
     label  : false,
     options: [
+      {name: 'contains', value: 'contains'},
       {name: 'equals', value: 'equals'},
       {name: 'not equals', value: 'not'},
       {name: 'in', value: 'in'},
       {name: 'not in', value: '!'},
-      {name: 'contains', value: 'contains'},
       {name: 'begins with', value: 'startsWith'},
       {name: 'ends with', value: 'endsWith'},
       {name: 'between', value: 'between'},
