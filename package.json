@@ -40,6 +40,7 @@
       "aurelia-form": "^0.3.0",
       "aurelia-framework": "^1.0.0",
       "aurelia-view-manager": "^0.1.0",
+      "aurelia-config": "^0.1.1",
       "extend": "^3.0.0"
     },
     "peerDependencies": {
