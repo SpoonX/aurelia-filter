@@ -1,9 +1,11 @@
-import {customElement, bindable, bindingMode} from 'aurelia-framework';
+import {inject, customElement, bindable, bindingMode} from 'aurelia-framework';
 import {resolvedView}                         from 'aurelia-view-manager';
 import {CriteriaBuilder}                      from './criteriaBuilder';
+import {Configuration}                        from 'aurelia-config';
 
 @customElement('filter')
 @resolvedView('spoonx/filter', 'filter')
+@inject(Configuration.of('aurelia-filter'))
 export class Filter extends CriteriaBuilder {
   @bindable({defaultBindingMode: bindingMode.twoWay}) criteria = {};
   @bindable columns                                            = [];
@@ -26,20 +28,7 @@ export class Filter extends CriteriaBuilder {
     key    : 'operator',
     type   : 'select',
     label  : false,
-    options: [
-      {name: 'equals', value: 'equals'},
-      {name: 'not equals', value: 'not'},
-      {name: 'in', value: 'in'},
-      {name: 'not in', value: '!'},
-      {name: 'contains', value: 'contains'},
-      {name: 'begins with', value: 'startsWith'},
-      {name: 'ends with', value: 'endsWith'},
-      {name: 'between', value: 'between'},
-      {name: 'greater than', value: 'greaterThan'},
-      {name: 'less than', value: 'lessThan'},
-      {name: 'less or equal than', value: 'lessThanOrEqual'},
-      {name: 'greater or equal than', value: 'greaterThanOrEqual'}
-    ]
+    options: []
   };
 
   valueElement = {
@@ -50,6 +39,11 @@ export class Filter extends CriteriaBuilder {
       style: 'margin-bottom: 0' // button group styling issue
     }
   };
+
+  constructor(config) {
+    super();
+    this.operatorElement.options = config.operatorOptions;
+  }
 
   attached() {
     if (this.entity) {
