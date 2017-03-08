@@ -3,13 +3,15 @@
 exports.__esModule = true;
 exports.Filter = undefined;
 
-var _dec, _dec2, _dec3, _class, _desc, _value, _class2, _descriptor, _descriptor2, _descriptor3, _descriptor4, _descriptor5;
+var _dec, _dec2, _dec3, _dec4, _class, _desc, _value, _class2, _descriptor, _descriptor2, _descriptor3, _descriptor4, _descriptor5;
 
 var _aureliaFramework = require('aurelia-framework');
 
 var _aureliaViewManager = require('aurelia-view-manager');
 
 var _criteriaBuilder = require('./criteriaBuilder');
+
+var _aureliaConfig = require('aurelia-config');
 
 function _initDefineProp(target, property, descriptor, context) {
   if (!descriptor) return;
@@ -60,35 +62,49 @@ function _initializerWarningHelper(descriptor, context) {
   throw new Error('Decorating class property failed. Please ensure that transform-class-properties is enabled.');
 }
 
-var Filter = exports.Filter = (_dec = (0, _aureliaFramework.customElement)('filter'), _dec2 = (0, _aureliaViewManager.resolvedView)('spoonx/filter', 'filter'), _dec3 = (0, _aureliaFramework.bindable)({ defaultBindingMode: _aureliaFramework.bindingMode.twoWay }), _dec(_class = _dec2(_class = (_class2 = function (_CriteriaBuilder) {
+var Filter = exports.Filter = (_dec = (0, _aureliaFramework.customElement)('filter'), _dec2 = (0, _aureliaViewManager.resolvedView)('spoonx/filter', 'filter'), _dec3 = (0, _aureliaFramework.inject)(_aureliaConfig.Configuration.of('aurelia-filter')), _dec4 = (0, _aureliaFramework.bindable)({ defaultBindingMode: _aureliaFramework.bindingMode.twoWay }), _dec(_class = _dec2(_class = _dec3(_class = (_class2 = function (_CriteriaBuilder) {
   _inherits(Filter, _CriteriaBuilder);
 
-  function Filter() {
-    var _temp, _this, _ret;
-
+  function Filter(config) {
     
 
-    for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
-      args[_key] = arguments[_key];
-    }
+    var _this = _possibleConstructorReturn(this, _CriteriaBuilder.call(this));
 
-    return _ret = (_temp = (_this = _possibleConstructorReturn(this, _CriteriaBuilder.call.apply(_CriteriaBuilder, [this].concat(args))), _this), _initDefineProp(_this, 'criteria', _descriptor, _this), _initDefineProp(_this, 'columns', _descriptor2, _this), _initDefineProp(_this, 'entity', _descriptor3, _this), _initDefineProp(_this, 'showIdColumns', _descriptor4, _this), _initDefineProp(_this, 'excludeColumns', _descriptor5, _this), _this.filters = [], _this.fieldTypes = [], _this.fieldEnumerations = {}, _this.fieldElement = {
+    _initDefineProp(_this, 'criteria', _descriptor, _this);
+
+    _initDefineProp(_this, 'columns', _descriptor2, _this);
+
+    _initDefineProp(_this, 'entity', _descriptor3, _this);
+
+    _initDefineProp(_this, 'showIdColumns', _descriptor4, _this);
+
+    _initDefineProp(_this, 'excludeColumns', _descriptor5, _this);
+
+    _this.filters = [];
+    _this.fieldTypes = [];
+    _this.fieldEnumerations = {};
+    _this.fieldElement = {
       key: 'field',
       type: 'select',
       label: false,
       options: []
-    }, _this.operatorElement = {
+    };
+    _this.operatorElement = {
       key: 'operator',
       type: 'select',
       label: false,
-      options: [{ name: 'equals', value: 'equals' }, { name: 'not equals', value: 'not' }, { name: 'in', value: 'in' }, { name: 'not in', value: '!' }, { name: 'contains', value: 'contains' }, { name: 'begins with', value: 'startsWith' }, { name: 'ends with', value: 'endsWith' }, { name: 'between', value: 'between' }, { name: 'greater than', value: 'greaterThan' }, { name: 'less than', value: 'lessThan' }, { name: 'less or equal than', value: 'lessThanOrEqual' }, { name: 'greater or equal than', value: 'greaterThanOrEqual' }]
-    }, _this.valueElement = {
+      options: []
+    };
+    _this.valueElement = {
       key: 'value',
       type: 'string',
       label: false,
       attributes: {
         style: 'margin-bottom: 0' }
-    }, _temp), _possibleConstructorReturn(_this, _ret);
+    };
+
+    _this.operatorElement.options = config.operatorOptions;
+    return _this;
   }
 
   Filter.prototype.attached = function attached() {
@@ -366,7 +382,7 @@ var Filter = exports.Filter = (_dec = (0, _aureliaFramework.customElement)('filt
   };
 
   return Filter;
-}(_criteriaBuilder.CriteriaBuilder), (_descriptor = _applyDecoratedDescriptor(_class2.prototype, 'criteria', [_dec3], {
+}(_criteriaBuilder.CriteriaBuilder), (_descriptor = _applyDecoratedDescriptor(_class2.prototype, 'criteria', [_dec4], {
   enumerable: true,
   initializer: function initializer() {
     return {};
@@ -389,4 +405,4 @@ var Filter = exports.Filter = (_dec = (0, _aureliaFramework.customElement)('filt
 }), _descriptor5 = _applyDecoratedDescriptor(_class2.prototype, 'excludeColumns', [_aureliaFramework.bindable], {
   enumerable: true,
   initializer: null
-})), _class2)) || _class) || _class);
+})), _class2)) || _class) || _class) || _class);

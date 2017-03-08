@@ -1,7 +1,9 @@
 import {Config,resolvedView} from 'aurelia-view-manager';
-import {customElement,bindable,bindingMode} from 'aurelia-framework';
+import {inject,customElement,bindable,bindingMode} from 'aurelia-framework';
+import {Configuration} from 'aurelia-config';
 
 export declare function configure(aurelia?: any): any;
+export declare const config: any;
 export declare class CriteriaBuilder {
   updateCriteria(): any;
   parseOperator(filter?: any): any;
@@ -22,6 +24,7 @@ export declare class Filter extends CriteriaBuilder {
   fieldElement: any;
   operatorElement: any;
   valueElement: any;
+  constructor(config?: any);
   attached(): any;
   parseCriteria(criteriaWhere?: any): any;
   buildFieldData(field?: any): any;

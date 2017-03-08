@@ -1,4 +1,4 @@
-var _dec, _dec2, _dec3, _class, _desc, _value, _class2, _descriptor, _descriptor2, _descriptor3, _descriptor4, _descriptor5;
+var _dec, _dec2, _dec3, _dec4, _class, _desc, _value, _class2, _descriptor, _descriptor2, _descriptor3, _descriptor4, _descriptor5;
 
 function _initDefineProp(target, property, descriptor, context) {
   if (!descriptor) return;
@@ -43,31 +43,49 @@ function _initializerWarningHelper(descriptor, context) {
   throw new Error('Decorating class property failed. Please ensure that transform-class-properties is enabled.');
 }
 
-import { customElement, bindable, bindingMode } from 'aurelia-framework';
+import { inject, customElement, bindable, bindingMode } from 'aurelia-framework';
 import { resolvedView } from 'aurelia-view-manager';
 import { CriteriaBuilder } from './criteriaBuilder';
+import { Configuration } from 'aurelia-config';
 
-export let Filter = (_dec = customElement('filter'), _dec2 = resolvedView('spoonx/filter', 'filter'), _dec3 = bindable({ defaultBindingMode: bindingMode.twoWay }), _dec(_class = _dec2(_class = (_class2 = class Filter extends CriteriaBuilder {
-  constructor(...args) {
-    var _temp;
+export let Filter = (_dec = customElement('filter'), _dec2 = resolvedView('spoonx/filter', 'filter'), _dec3 = inject(Configuration.of('aurelia-filter')), _dec4 = bindable({ defaultBindingMode: bindingMode.twoWay }), _dec(_class = _dec2(_class = _dec3(_class = (_class2 = class Filter extends CriteriaBuilder {
 
-    return _temp = super(...args), _initDefineProp(this, 'criteria', _descriptor, this), _initDefineProp(this, 'columns', _descriptor2, this), _initDefineProp(this, 'entity', _descriptor3, this), _initDefineProp(this, 'showIdColumns', _descriptor4, this), _initDefineProp(this, 'excludeColumns', _descriptor5, this), this.filters = [], this.fieldTypes = [], this.fieldEnumerations = {}, this.fieldElement = {
+  constructor(config) {
+    super();
+
+    _initDefineProp(this, 'criteria', _descriptor, this);
+
+    _initDefineProp(this, 'columns', _descriptor2, this);
+
+    _initDefineProp(this, 'entity', _descriptor3, this);
+
+    _initDefineProp(this, 'showIdColumns', _descriptor4, this);
+
+    _initDefineProp(this, 'excludeColumns', _descriptor5, this);
+
+    this.filters = [];
+    this.fieldTypes = [];
+    this.fieldEnumerations = {};
+    this.fieldElement = {
       key: 'field',
       type: 'select',
       label: false,
       options: []
-    }, this.operatorElement = {
+    };
+    this.operatorElement = {
       key: 'operator',
       type: 'select',
       label: false,
-      options: [{ name: 'equals', value: 'equals' }, { name: 'not equals', value: 'not' }, { name: 'in', value: 'in' }, { name: 'not in', value: '!' }, { name: 'contains', value: 'contains' }, { name: 'begins with', value: 'startsWith' }, { name: 'ends with', value: 'endsWith' }, { name: 'between', value: 'between' }, { name: 'greater than', value: 'greaterThan' }, { name: 'less than', value: 'lessThan' }, { name: 'less or equal than', value: 'lessThanOrEqual' }, { name: 'greater or equal than', value: 'greaterThanOrEqual' }]
-    }, this.valueElement = {
+      options: []
+    };
+    this.valueElement = {
       key: 'value',
       type: 'string',
       label: false,
       attributes: {
         style: 'margin-bottom: 0' }
-    }, _temp;
+    };
+    this.operatorElement.options = config.operatorOptions;
   }
 
   attached() {
@@ -320,7 +338,7 @@ export let Filter = (_dec = customElement('filter'), _dec2 = resolvedView('spoon
       this.columns.push(filterColumn);
     }
   }
-}, (_descriptor = _applyDecoratedDescriptor(_class2.prototype, 'criteria', [_dec3], {
+}, (_descriptor = _applyDecoratedDescriptor(_class2.prototype, 'criteria', [_dec4], {
   enumerable: true,
   initializer: function () {
     return {};
@@ -343,4 +361,4 @@ export let Filter = (_dec = customElement('filter'), _dec2 = resolvedView('spoon
 }), _descriptor5 = _applyDecoratedDescriptor(_class2.prototype, 'excludeColumns', [bindable], {
   enumerable: true,
   initializer: null
-})), _class2)) || _class) || _class);
+})), _class2)) || _class) || _class) || _class);

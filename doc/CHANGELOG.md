@@ -1,3 +1,15 @@
+<a name="2.1.0"></a>
+# [2.1.0](https://github.com/SpoonX/aurelia-filter/compare/v2.0.1...v2.1.0) (2017-03-08)
+
+
+### Bug Fixes
+
+* **project:** add config ([cafbc32](https://github.com/SpoonX/aurelia-filter/commit/cafbc32))
+* **project:** change operators order ([dc1f52c](https://github.com/SpoonX/aurelia-filter/commit/dc1f52c))
+* **project:** make operator options configurable ([fdd16f7](https://github.com/SpoonX/aurelia-filter/commit/fdd16f7))
+
+
+
 <a name="2.0.1"></a>
 ## [2.0.1](https://github.com/SpoonX/aurelia-filter/compare/v2.0.0...v2.0.1) (2017-02-20)
 

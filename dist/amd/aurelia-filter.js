@@ -4,6 +4,7 @@ define(['exports', 'aurelia-view-manager', './criteriaBuilder'], function (expor
   Object.defineProperty(exports, "__esModule", {
     value: true
   });
+  exports.config = undefined;
   exports.configure = configure;
   function configure(aurelia) {
     aurelia.plugin('aurelia-form');
@@ -14,4 +15,10 @@ define(['exports', 'aurelia-view-manager', './criteriaBuilder'], function (expor
 
     aurelia.globalResources('./filter');
   }
+
+  var config = exports.config = {
+    'aurelia-filter': {
+      operatorOptions: [{ name: 'equals', value: 'equals' }, { name: 'not equals', value: 'not' }, { name: 'in', value: 'in' }, { name: 'not in', value: '!' }, { name: 'contains', value: 'contains' }, { name: 'begins with', value: 'startsWith' }, { name: 'ends with', value: 'endsWith' }, { name: 'between', value: 'between' }, { name: 'greater than', value: 'greaterThan' }, { name: 'less than', value: 'lessThan' }, { name: 'less or equal than', value: 'lessThanOrEqual' }, { name: 'greater or equal than', value: 'greaterThanOrEqual' }]
+    }
+  };
 });
