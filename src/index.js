@@ -12,7 +12,7 @@ export function configure(aurelia) {
 
 export const config = {
   'aurelia-filter': {
-    operatorOptions : [
+    operatorOptions: [
       {name: 'equals', value: 'equals'},
       {name: 'not equals', value: 'not'},
       {name: 'in', value: 'in'},
