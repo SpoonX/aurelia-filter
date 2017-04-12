@@ -74,32 +74,25 @@ export class Filter extends CriteriaBuilder {
     this.create();
   }
 
-  parseCriteria(criteriaWhere) {
+  parseCriteria(criteriaWhere, orBlock) {
     let data = {};
 
     if (criteriaWhere.or) {
-      criteriaWhere.or.forEach((block, i) => {
-        Object.keys(block).forEach((field) => {
-          data = Object.assign(this.buildFieldData(block[field]), {field: field});
-          if (!this.filters[i]) {
-            // create a new block
-            return this.create(undefined, data, true);
-          }
-
-          // Add AND condition to the current block
-          this.create(i, data, true);
-        });
+      return criteriaWhere.or.forEach((criteria, i) => {
+        this.parseCriteria(criteria, i);
       });
-
-      return;
     }
 
     Object.keys(criteriaWhere).forEach((field, i) => {
       data = Object.assign(this.buildFieldData(criteriaWhere[field]), {field: field});
 
-      if (i === 0) {
-        // create the first block
+      if (!this.filters[orBlock] || i === 0) {
+        // create a new block
         return this.create(undefined, data, true);
+      }
+
+      if (typeof orBlock !== undefined) {
+        return this.create(orBlock, data, true);
       }
 
       // Add AND condition to the first block
