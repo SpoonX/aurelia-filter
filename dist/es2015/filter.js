@@ -114,29 +114,34 @@ export let Filter = (_dec = customElement('filter'), _dec2 = resolvedView('spoon
     this.create();
   }
 
-  parseCriteria(criteriaWhere) {
+  parseCriteria(criteriaWhere, orIndex) {
     let data = {};
 
     if (criteriaWhere.or) {
-      criteriaWhere.or.forEach((block, i) => {
-        Object.keys(block).forEach(field => {
-          data = Object.assign(this.buildFieldData(block[field]), { field: field });
-          if (!this.filters[i]) {
-            return this.create(undefined, data, true);
-          }
-
-          this.create(i, data, true);
-        });
+      return criteriaWhere.or.forEach((criteria, i) => {
+        this.parseCriteria(criteria, i);
       });
-
-      return;
     }
 
     Object.keys(criteriaWhere).forEach((field, i) => {
       data = Object.assign(this.buildFieldData(criteriaWhere[field]), { field: field });
 
-      if (i === 0) {
+      Object.keys(criteriaWhere[field]).forEach(property => {
+        let nestedCriteria = criteriaWhere[field][property];
+
+        if (typeof nestedCriteria !== 'object' || Array.isArray(nestedCriteria)) {
+          return;
+        }
+
+        this.parseCriteria({ [`${ field }.${ property }`]: nestedCriteria }, orIndex, i);
+      });
+
+      if (typeof orIndex !== 'undefined' && !this.filters[orIndex] || i === 0) {
         return this.create(undefined, data, true);
+      }
+
+      if (typeof orIndex !== 'undefined') {
+        return this.create(orIndex, data, true);
       }
 
       this.create(0, data, true);

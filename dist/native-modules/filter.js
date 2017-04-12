@@ -3,6 +3,8 @@
 exports.__esModule = true;
 exports.Filter = undefined;
 
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+
 var _dec, _dec2, _dec3, _dec4, _class, _desc, _value, _class2, _descriptor, _descriptor2, _descriptor3, _descriptor4, _descriptor5;
 
 var _aureliaFramework = require('aurelia-framework');
@@ -135,31 +137,38 @@ var Filter = exports.Filter = (_dec = (0, _aureliaFramework.customElement)('filt
     this.create();
   };
 
-  Filter.prototype.parseCriteria = function parseCriteria(criteriaWhere) {
+  Filter.prototype.parseCriteria = function parseCriteria(criteriaWhere, orIndex) {
     var _this3 = this;
 
     var data = {};
 
     if (criteriaWhere.or) {
-      criteriaWhere.or.forEach(function (block, i) {
-        Object.keys(block).forEach(function (field) {
-          data = Object.assign(_this3.buildFieldData(block[field]), { field: field });
-          if (!_this3.filters[i]) {
-            return _this3.create(undefined, data, true);
-          }
-
-          _this3.create(i, data, true);
-        });
+      return criteriaWhere.or.forEach(function (criteria, i) {
+        _this3.parseCriteria(criteria, i);
       });
-
-      return;
     }
 
     Object.keys(criteriaWhere).forEach(function (field, i) {
       data = Object.assign(_this3.buildFieldData(criteriaWhere[field]), { field: field });
 
-      if (i === 0) {
+      Object.keys(criteriaWhere[field]).forEach(function (property) {
+        var _this3$parseCriteria;
+
+        var nestedCriteria = criteriaWhere[field][property];
+
+        if ((typeof nestedCriteria === 'undefined' ? 'undefined' : _typeof(nestedCriteria)) !== 'object' || Array.isArray(nestedCriteria)) {
+          return;
+        }
+
+        _this3.parseCriteria((_this3$parseCriteria = {}, _this3$parseCriteria[field + '.' + property] = nestedCriteria, _this3$parseCriteria), orIndex, i);
+      });
+
+      if (typeof orIndex !== 'undefined' && !_this3.filters[orIndex] || i === 0) {
         return _this3.create(undefined, data, true);
+      }
+
+      if (typeof orIndex !== 'undefined') {
+        return _this3.create(orIndex, data, true);
       }
 
       _this3.create(0, data, true);

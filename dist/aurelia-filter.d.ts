@@ -26,7 +26,7 @@ export declare class Filter extends CriteriaBuilder {
   valueElement: any;
   constructor(config?: any);
   attached(): any;
-  parseCriteria(criteriaWhere?: any): any;
+  parseCriteria(criteriaWhere?: any, orIndex?: any): any;
   buildFieldData(field?: any): any;
   create(blockIndex?: any, data?: any, skipOnChange?: any): any;
   destroy(blockIndex?: any, index?: any): any;
