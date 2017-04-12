@@ -74,7 +74,7 @@ export class Filter extends CriteriaBuilder {
     this.create();
   }
 
-  parseCriteria(criteriaWhere, orBlock) {
+  parseCriteria(criteriaWhere, orIndex) {
     let data = {};
 
     if (criteriaWhere.or) {
@@ -86,13 +86,25 @@ export class Filter extends CriteriaBuilder {
     Object.keys(criteriaWhere).forEach((field, i) => {
       data = Object.assign(this.buildFieldData(criteriaWhere[field]), {field: field});
 
-      if (!this.filters[orBlock] || i === 0) {
+      // parse nested criteria
+      Object.keys(criteriaWhere[field]).forEach(property => {
+        let nestedCriteria = criteriaWhere[field][property];
+
+        if (typeof nestedCriteria !== 'object' || Array.isArray(nestedCriteria)) {
+          return;
+        }
+
+        // check in `create()` prevents creating filters with invalid properties
+        this.parseCriteria({[`${field}.${property}`]: nestedCriteria}, orIndex, i);
+      });
+
+      if ((typeof orIndex !== 'undefined' && !this.filters[orIndex]) || i === 0) {
         // create a new block
         return this.create(undefined, data, true);
       }
 
-      if (typeof orBlock !== undefined) {
-        return this.create(orBlock, data, true);
+      if (typeof orIndex !== 'undefined') {
+        return this.create(orIndex, data, true);
       }
 
       // Add AND condition to the first block
