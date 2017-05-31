@@ -133,7 +133,7 @@ export let Filter = (_dec = customElement('filter'), _dec2 = resolvedView('spoon
           return;
         }
 
-        this.parseCriteria({ [`${ field }.${ property }`]: nestedCriteria }, orIndex, i);
+        this.parseCriteria({ [`${field}.${property}`]: nestedCriteria }, orIndex, i);
       });
 
       if (typeof orIndex !== 'undefined' && !this.filters[orIndex] || i === 0) {

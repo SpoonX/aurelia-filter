@@ -4,36 +4,35 @@
     <div repeat.for="field of filter">
       <div class="col-md-12">
         <div class="col-md-4">
-          <form-field
+          <form-select
             change.delegate="onChange($parent.$index, $index) & debounce:200"
             value.bind="field.data.field"
-            element.bind="field.field">
-          </form-field>
+            select-options.bind="field.field.options">
+          </form-select>
         </div>
 
         <div class="col-md-4">
-          <form-field
+          <form-select
             change.delegate="onChange($parent.$index, $index) & debounce:200"
             value.bind="field.data.operator"
-            element.bind="field.operator">
-          </form-field>
+            select-options.bind="field.operator.options">
+          </form-select>
         </div>
 
         <div class="col-md-4">
           <div class="input-group">
             <div class="${field.data.hasError ? 'has-error' : ''}">
-              <form-field
+              <form-element
                 if.bind="field.value.type !== 'select'"
                 keyup.delegate="onChange($parent.$index, $index, true) & debounce:50"
                 value.bind="field.data.value"
-                element.bind="field.value">
-              </form-field>
-              <form-field
+                element.bind="field.value.type">
+              </form-element>
+              <form-select
                 change.delegate="onChange($parent.$index, $index, true) & debounce:50"
                 if.bind="field.value.type === 'select'"
-                value.bind="field.data.value"
-                element.bind="field.value">
-              </form-field>
+                value.bind="field.data.value">
+              </form-select>
             </div>
 
             <div class="input-group-btn">
@@ -64,18 +63,17 @@
         </div>
 
         <div class="col-md-4" style="margin-bottom: 15px;">
-          <form-field
+          <form-element
             if.bind="field.value.type !== 'select'"
             keyup.delegate="onChange($parent.$index, $index, true) & debounce:50"
             value.bind="field.data.between"
-            element.bind="field.value">
-          </form-field>
-          <form-field
+            element.bind="field.value.type">
+          </form-element>
+          <form-select
             change.delegate="onChange($parent.$index, $index, true) & debounce:50"
             if.bind="field.value.type === 'select'"
-            value.bind="field.data.between"
-            element.bind="field.value">
-          </form-field>
+            value.bind="field.data.between">
+          </form-select>
         </div>
       </div>
     </div>
