@@ -13,6 +13,10 @@ Features:
 * [ORM entities](http://aurelia-orm.spoonx.org/api_entity.html)
 * And more
 
+## Breaking changes
+
+v3.0 of aurelia-filter uses the latest version of aurelia-form.
+
 ## Uses
 
 aurelia-filter needs following plugins installed and configured:
@@ -27,7 +31,7 @@ You can find usage examples and the documentation [here](http://aurelia-filter.s
 The [changelog](doc/CHANGELOG.md) provides you with information about important changes.
 
 ## Example
- 
+
 Here's a snippet to give you an idea of what this module supports.
 
 ```js
