@@ -12,6 +12,7 @@ System.config({
     "aurelia-dependency-injection": "npm:aurelia-dependency-injection@1.3.1",
     "aurelia-form": "npm:aurelia-form@1.3.1",
     "aurelia-framework": "npm:aurelia-framework@1.1.2",
+    "aurelia-pal": "npm:aurelia-pal@1.3.0",
     "aurelia-pal-browser": "npm:aurelia-pal-browser@1.2.1",
     "aurelia-polyfills": "npm:aurelia-polyfills@1.2.1",
     "aurelia-testing": "npm:aurelia-testing@1.0.0-beta.3.0.1",
